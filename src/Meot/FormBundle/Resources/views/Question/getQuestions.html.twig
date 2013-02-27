@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>Welcome to Symfony!</title>
+    </head>
+    <body>
+        <ul id="navigation">
+            {% for item in questions %}
+                <li>{{ item.text }}</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

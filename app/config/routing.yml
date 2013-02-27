@@ -1,3 +1,16 @@
+questions:
+    type:     rest
+    resource: Meot\FormBundle\Controller\QuestionController
+
+meot_form:
+    resource: "@MeotFormBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
 # Internal routing configuration to handle ESI
 # ****** WARNING ******
 # This route should be enabled with caution as it can open a security vulnerability

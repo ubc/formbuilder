@@ -1,0 +1,197 @@
+<?php
+namespace Meot\FormBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Meot\FormBundle\Entity\Question,
+    Meot\FormBundle\Form\QuestionType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route,
+    Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use FOS\RestBundle\Controller\Annotations as Rest,
+    FOS\RestBundle\Controller\FOSRestController,
+    FOS\RestBundle\Controller\Annotations\QueryParam,
+    FOS\RestBundle\Routing\ClassResourceInterface,
+    FOS\Rest\Util\Codes;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
+
+class QuestionController extends FosRestController implements ClassResourceInterface
+{
+    /**
+     * Get all questions
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  output="Meot\FormBundle\Entity\Question",
+     *  statusCodes={
+     *      200="Returned when successful"},
+     *  filters={
+     *      {"name"="limit", "dataType"="integer"},
+     *      {"name"="another-filter", "dataType"="string", "pattern"="(foo|bar) ASC|DESC"}
+     *  }
+     * )
+     * @Rest\View(templateVar="questions")
+     *
+     * @return ArrayCollection list of questions
+     */
+    public function cgetAction()
+    {
+        $questions = $this->getDoctrine()
+            ->getRepository('MeotFormBundle:Question')
+            ->findAll();
+
+        return $questions;
+    }
+
+    /**
+     * Get question by id
+     *
+     * @param int $id id of the question
+     *
+     * @access public
+     *
+     * @return question object
+
+     * @ApiDoc(
+     *  resource=true,
+     *  output="Meot\FormBundle\Entity\Question",
+     *  statusCodes={
+     *      200="Returned when successful",
+     *      404="Returned when no question found"}
+     * )
+     *
+     * @Rest\View
+     */
+    public function getAction($id)
+    {
+        $question = $this->getDoctrine()
+            ->getRepository('MeotFormBundle:Question')
+            ->find($id);
+
+        if (!$question instanceof Question) {
+            throw new NotFoundHttpException('Question not found');
+        }
+
+        return $question;
+    }
+
+
+    /**
+     * Display the form
+     *
+     * @return Form form instance
+     *
+     * @Rest\View()
+     */
+    public function newAction()
+    {
+        return $this->getForm();
+    }
+
+    /**
+     * Create a new resource
+     *
+     * When successful, the new resource URI will be return in header as
+     * Location. E.g., Location: http://example.com/question/ID.json
+     *
+     * @param Request $request
+     *
+     * @return View view instance
+     *
+     * @Rest\View()
+     * @ApiDoc(
+     *  input="Meot\FormBundle\Form\QuestionType",
+     *  statusCodes={
+     *      201="Returned when successful"
+     *  }
+     * )
+     */
+    public function cpostAction(Request $request)
+    {
+        $entity = new Question();
+        $form = $this->createForm(new QuestionType(), $entity);
+
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            $response = new Response();
+            $response->setStatusCode(Codes::HTTP_CREATED);
+            $response->headers->set('Location',
+                $this->generateUrl(
+                    'get_question', array('id' => $entity->getId()),
+                    true // absolute URL
+                )
+            );
+
+            return $response;
+        } else {
+            $view = $this->view($form);
+        }
+
+        return $view;
+    }
+
+    protected function getForm($question = null)
+    {
+        return $this->createForm(new QuestionType(), $question);
+    }
+
+    /**
+     * Update the question
+     *
+     * @param Request  $request request
+     * @param Question $entity  the question entity
+     *
+     * @return View view instance
+     *
+     * @Route("/questions/{id}.{_format}", name="put_question", requirements={"id" = "\d+"})
+     * @Method("PUT")
+     * @Rest\View()
+     * @ApiDoc(
+     *  input="Meot\FormBundle\Form\QuestionType"
+     * )
+     */
+    public function putAction(Request $request, Question $entity)
+    {
+        $form = $this->getForm($entity);
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->view(null, Codes::HTTP_NO_CONTENT);
+        }
+
+        return array(
+            'form' => $form,
+        );
+    }
+
+    /**
+     * Delete the question
+     *
+     * @param int $id id of the resource
+     *
+     * @return View view instance
+     *
+     * @Route("/questions/{id}.{_format}", name="delete_question", requirements={"id" = "\d+"})
+     * @Method("DELETE")
+     * @Rest\View()
+     * @ApiDoc()
+     */
+    public function deleteAction(Question $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
+
+        return $this->view(null, Codes::HTTP_NO_CONTENT);
+    }
+}
