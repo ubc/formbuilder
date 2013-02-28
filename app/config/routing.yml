@@ -1,6 +1,6 @@
-questions:
+api:
     type:     rest
-    resource: Meot\FormBundle\Controller\QuestionController
+    resource: "@MeotFormBundle/Resources/config/routing.yml"
 
 meot_form:
     resource: "@MeotFormBundle/Controller/"

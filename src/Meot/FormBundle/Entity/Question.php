@@ -272,4 +272,9 @@ class Question
     {
         return $this->form_questions;
     }
+
+    public function __toString()
+    {
+        return $this->text;
+    }
 }

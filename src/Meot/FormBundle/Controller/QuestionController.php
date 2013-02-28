@@ -28,7 +28,6 @@ class QuestionController extends FosRestController implements ClassResourceInter
      *      200="Returned when successful"},
      *  filters={
      *      {"name"="limit", "dataType"="integer"},
-     *      {"name"="another-filter", "dataType"="string", "pattern"="(foo|bar) ASC|DESC"}
      *  }
      * )
      * @Rest\View(templateVar="questions")
@@ -54,7 +53,6 @@ class QuestionController extends FosRestController implements ClassResourceInter
      * @return question object
 
      * @ApiDoc(
-     *  resource=true,
      *  output="Meot\FormBundle\Entity\Question",
      *  statusCodes={
      *      200="Returned when successful",

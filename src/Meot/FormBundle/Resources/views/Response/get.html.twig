@@ -1,0 +1,5 @@
+<form action="{{ path('new_question_response', {'question':1}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <input type="submit" />
+</form>

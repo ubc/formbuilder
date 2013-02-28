@@ -19,12 +19,13 @@ class ResponseType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Meot\FormBundle\Entity\Response'
+            'data_class' => 'Meot\FormBundle\Entity\Response',
+            'csrf_protection'   => false,
         ));
     }
 
     public function getName()
     {
-        return 'meot_formbundle_responsetype';
+        return 'response';
     }
 }
