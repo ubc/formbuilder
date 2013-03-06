@@ -7,5 +7,6 @@ build/
 report/
 vendor
 composer.phar
+composer.lock
 Session.vim
 *.bak
