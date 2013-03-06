@@ -2,6 +2,10 @@ web/bundles/
 app/bootstrap.php.cache
 app/cache/*
 app/logs/*
+src/Acme
 build/
+report/
 vendor
 composer.phar
+Session.vim
+*.bak
