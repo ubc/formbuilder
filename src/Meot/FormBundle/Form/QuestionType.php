@@ -12,7 +12,7 @@ class QuestionType extends AbstractType
     {
         $builder
             ->add('text')
-            ->add('repsonse_type')
+            ->add('response_type')
             ->add('is_public')
             ->add('is_master')
             ->add('owner')

@@ -151,7 +151,10 @@ class QuestionController extends FosRestController implements ClassResourceInter
      * @Method("PUT")
      * @Rest\View()
      * @ApiDoc(
-     *  input="Meot\FormBundle\Form\QuestionType"
+     *  input="Meot\FormBundle\Form\QuestionType",
+     *  statusCodes={
+     *      204="Returned when successful",
+     *      404="Returned when no question found"}
      * )
      */
     public function putAction(Request $request, Question $entity)
@@ -182,7 +185,11 @@ class QuestionController extends FosRestController implements ClassResourceInter
      * @Route("/questions/{id}.{_format}", name="delete_question", requirements={"id" = "\d+"})
      * @Method("DELETE")
      * @Rest\View()
-     * @ApiDoc()
+     * @ApiDoc(
+     *  statusCodes={
+     *      204="Returned when successful",
+     *      404="Returned when no question found"}
+     * )
      */
     public function deleteAction(Question $entity)
     {

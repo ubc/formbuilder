@@ -36,9 +36,9 @@ class Question
      * Response type
      * @var integer
      *
-     * @ORM\Column(name="repsonse_type", type="smallint")
+     * @ORM\Column(name="response_type", type="smallint")
      */
-    private $repsonse_type;
+    private $response_type;
 
     /**
      * @ORM\OneToMany(targetEntity="Response", mappedBy="question")
@@ -116,26 +116,26 @@ class Question
     }
 
     /**
-     * Set repsonse_type
+     * Set response_type
      *
-     * @param integer $repsonseType
+     * @param integer $responseType
      * @return Question
      */
-    public function setRepsonseType($repsonseType)
+    public function setResponseType($responseType)
     {
-        $this->repsonse_type = $repsonseType;
+        $this->response_type = $responseType;
 
         return $this;
     }
 
     /**
-     * Get repsonse_type
+     * Get response_type
      *
      * @return integer
      */
-    public function getRepsonseType()
+    public function getResponseType()
     {
-        return $this->repsonse_type;
+        return $this->response_type;
     }
 
     /**

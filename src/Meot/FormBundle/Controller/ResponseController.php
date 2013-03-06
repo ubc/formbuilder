@@ -25,7 +25,9 @@ class ResponseController extends FosRestController implements ClassResourceInter
      * @ApiDoc(
      *  output="Meot\FormBundle\Entity\Response",
      *  statusCodes={
-     *      200="Returned when successful"},
+     *      200="Returned when successful",
+     *      404="Returned when getting responses from non-existing question"
+     *  },
      *  filters={
      *      {"name"="limit", "dataType"="integer"},
      *  }
@@ -66,7 +68,7 @@ class ResponseController extends FosRestController implements ClassResourceInter
             $response->setStatusCode(Codes::HTTP_CREATED);
             $response->headers->set('Location',
                 $this->generateUrl(
-                    'get_question_response', array('question_id' => $question->getId(), 'id' => $entity->getId()),
+                    'get_question_response', array('question_id' => $question->getId(), 'response' => $entity->getId()),
                     true // absolute URL
                 )
             );
@@ -94,7 +96,13 @@ class ResponseController extends FosRestController implements ClassResourceInter
      */
     public function getAction($question_id, Response $response)
     {
-        return array('response' => $response);
+        // check the combination of two ids
+        if ($response->getQuestion()->getId() != $question_id) {
+            throw new NotFoundHttpException('Response not found');
+        }
+
+        //return array('response' => $response);
+        return $response;
     }
 
     /**
@@ -112,6 +120,11 @@ class ResponseController extends FosRestController implements ClassResourceInter
      */
     public function deleteAction($question_id, Response $response)
     {
+        // check the combination of two ids
+        if ($response->getQuestion()->getId() != $question_id) {
+            throw new NotFoundHttpException('Response not found');
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($response);
         $em->flush();
