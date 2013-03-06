@@ -1,13 +1,13 @@
 <?php
 namespace Meot\FormBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Meot\FormBundle\Entity\Question,
     Meot\FormBundle\Entity\Response;
 
-class LoadQuestionData extends AbstractFixture implements FixtureInterface
+class LoadQuestionData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * {@inheritDoc}
@@ -67,6 +67,18 @@ class LoadQuestionData extends AbstractFixture implements FixtureInterface
         $manager->persist($r5);
 
         $manager->flush();
+
+        $this->addReference('q1', $q1);
+        $this->addReference('q2', $q2);
+        $this->addReference('q3', $q3);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOrder()
+    {
+        return 1; // the order in which fixtures will be loaded
     }
 }
 

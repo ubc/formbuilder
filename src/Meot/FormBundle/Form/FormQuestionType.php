@@ -14,20 +14,21 @@ class FormQuestionType extends AbstractType
             ->add('form_id')
             ->add('question_id')
             ->add('order')
-            ->add('forms')
-            ->add('questions')
+            ->add('form')
+            ->add('question')
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Meot\FormBundle\Entity\FormQuestion'
+            'data_class' => 'Meot\FormBundle\Entity\FormQuestion',
+            'csrf_protection'   => false,
         ));
     }
 
     public function getName()
     {
-        return 'meot_formbundle_formquestiontype';
+        return 'question';
     }
 }

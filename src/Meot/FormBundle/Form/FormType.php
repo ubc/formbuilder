@@ -22,12 +22,13 @@ class FormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Meot\FormBundle\Entity\Form'
+            'data_class' => 'Meot\FormBundle\Entity\Form',
+            'csrf_protection'   => false,
         ));
     }
 
     public function getName()
     {
-        return 'meot_formbundle_formtype';
+        return 'form';
     }
 }

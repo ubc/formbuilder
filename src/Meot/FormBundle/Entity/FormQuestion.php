@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * FormQuestion
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Meot\FormBundle\Entity\FormQuestionRepository")
  */
 class FormQuestion
 {
@@ -38,7 +38,7 @@ class FormQuestion
     /**
      * @var integer
      *
-     * @ORM\Column(name="order", type="integer")
+     * @ORM\Column(name="sequence", type="integer")
      */
     private $order;
 
@@ -46,13 +46,13 @@ class FormQuestion
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="form_questions")
      * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
-    private $forms;
+    private $form;
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="form_questions")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
-    private $questions;
+    private $question;
 
     /**
      * Get id
@@ -134,48 +134,48 @@ class FormQuestion
     }
 
     /**
-     * Set forms
+     * Set form
      *
-     * @param \Meot\FormBundle\Entity\Form $forms
+     * @param \Meot\FormBundle\Entity\Form $form
      * @return FormQuestion
      */
-    public function setForms(\Meot\FormBundle\Entity\Form $forms = null)
+    public function setForm(\Meot\FormBundle\Entity\Form $form = null)
     {
-        $this->forms = $forms;
-    
+        $this->form = $form;
+
         return $this;
     }
 
     /**
-     * Get forms
+     * Get form
      *
-     * @return \Meot\FormBundle\Entity\Form 
+     * @return \Meot\FormBundle\Entity\Form
      */
-    public function getForms()
+    public function getForm()
     {
-        return $this->forms;
+        return $this->form;
     }
 
     /**
-     * Set questions
+     * Set question
      *
      * @param \Meot\FormBundle\Entity\Question $questions
      * @return FormQuestion
      */
-    public function setQuestions(\Meot\FormBundle\Entity\Question $questions = null)
+    public function setQuestion(\Meot\FormBundle\Entity\Question $question = null)
     {
-        $this->questions = $questions;
-    
+        $this->question = $question;
+
         return $this;
     }
 
     /**
-     * Get questions
+     * Get question
      *
-     * @return \Meot\FormBundle\Entity\Question 
+     * @return \Meot\FormBundle\Entity\Question
      */
-    public function getQuestions()
+    public function getQuestion()
     {
-        return $this->questions;
+        return $this->question;
     }
 }

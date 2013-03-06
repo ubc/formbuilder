@@ -3,6 +3,7 @@
 namespace Meot\FormBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Form
@@ -200,7 +201,7 @@ class Form
     public function addFormQuestion(\Meot\FormBundle\Entity\FormQuestion $formQuestions)
     {
         $this->form_questions[] = $formQuestions;
-    
+
         return $this;
     }
 
@@ -217,10 +218,15 @@ class Form
     /**
      * Get form_questions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormQuestions()
     {
         return $this->form_questions;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
