@@ -2,7 +2,8 @@
 namespace Meot\FormBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Meot\FormBundle\Entity\Question,
     Meot\FormBundle\Form\QuestionType;
@@ -114,6 +115,7 @@ class QuestionController extends FosRestController implements ClassResourceInter
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setOwner(0);
             $em->persist($entity);
             $em->flush();
 
@@ -147,7 +149,7 @@ class QuestionController extends FosRestController implements ClassResourceInter
      *
      * @return View view instance
      *
-     * @Route("/questions/{id}.{_format}", name="put_question", requirements={"id" = "\d+"})
+     * @Route("/questions/{id}.{_format}", name="put_question", requirements={"id" = "\d+"}, defaults={"_format" = "json"})
      * @Method("PUT")
      * @Rest\View()
      * @ApiDoc(
@@ -182,7 +184,7 @@ class QuestionController extends FosRestController implements ClassResourceInter
      *
      * @return View view instance
      *
-     * @Route("/questions/{id}.{_format}", name="delete_question", requirements={"id" = "\d+"})
+     * @Route("/questions/{id}.{_format}", name="delete_question", requirements={"id" = "\d+"}, defaults={"_format" = "json"})
      * @Method("DELETE")
      * @Rest\View()
      * @ApiDoc(

@@ -16,7 +16,11 @@ class QuestionType extends AbstractType
             ->add('is_public')
             ->add('is_master')
             ->add('owner')
-        ;
+            ->add('responses', 'collection', array(
+                'type' => new ResponseType(),
+                'allow_add'    => true,
+                'by_reference' => false,
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -29,6 +33,6 @@ class QuestionType extends AbstractType
 
     public function getName()
     {
-        return 'question';
+        return '';
     }
 }

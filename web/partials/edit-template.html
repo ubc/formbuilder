@@ -1,0 +1,37 @@
+<form name="myForm">
+    <div class="control-group" ng-class="{error: myForm.text.$invalid}">
+        <label for="text">Question Text</label>
+        <textarea id="text" name="text" ng-model="template.text" rows="5" class="input-block-level" required></textarea>
+        <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+    </div>
+
+    <div class="control-group" ng-class="{error: myForm.is_master.$invalid}">
+        <label class="checkbox"><input type="checkbox" ng-model="template.is_master"/>Master Question?</label>
+        <span class="help-block">Whether this question is a question shared with others</span>
+     </div>
+
+    <div class="control-group" ng-class="{error: myForm.response_type.$invalid}">
+        <label class="pull-left">Response</label>  <button ng-click="addResponse($event)" class="btn pull-right" ng-show="template.response_type == 3 ||template.response_type == 4">Add Response</button>
+        <select name="response_type" ng-model="template.response_type" class="input-block-level" required>
+            <option value="1">Text (one line)</option>
+            <option value="2">Text (multiple lines)</option>
+            <option value="3">Choice</option>
+            <option value="4">Multiple Choice</option>
+        </select>
+        <span ng-show="myForm.site.$error.required" class="help-inline">Required</span>
+     </div>
+
+    <div class="control-group controls-row" ng-class="{error: myForm.responses.$invalid}" ng-show="template.response_type == 3 ||template.response_type == 4">
+        <div class="input-append" ng-repeat="response in template.responses">
+            <input type="text" class="input-large" ng-model="response.text"/>
+            <span class="add-on" ng-click="removeResponse(response)"><i class="icon-remove"></i></span>
+        </div>
+    </div>
+
+    <br>
+    <a href="#/" class="btn">Cancel</a>
+    <button ng-click="save()" ng-disabled="isClean() || myForm.$invalid"
+            class="btn btn-primary">Save</button>
+    <button ng-click="destroy()"
+            ng-show="template.id" class="btn btn-danger">Delete</button>
+</form>

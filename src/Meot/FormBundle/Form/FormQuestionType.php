@@ -29,6 +29,6 @@ class FormQuestionType extends AbstractType
 
     public function getName()
     {
-        return 'question';
+        return '';
     }
 }

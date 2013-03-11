@@ -1,0 +1,21 @@
+<ul class="nav nav-list">
+    <li class="nav-header">Question Bank</li>
+    <li class="search"><input type="search" placeholder="Search" id="search" ng-model="query.text" class="search-query"/></li>
+</ul>
+<div id="question-template-list">
+    <ul class="nav nav-list">
+        <li class="question-template" draggable='{connectToSortable: "#question-list", helper: "clone", revert: "invalid"}' ng-repeat="template in templates| filter:query" data-template-id="{{template.id}}">
+            <p>{{template.text | truncate:180}}</p>
+            <i title="This question is a master question template and it is shared with others." ui-jq="tooltip" data-placement="right" data-delay="500" class="icon-lock template-lock" ng-show="template.is_master"></i>
+            <a ng-href="#/editTemplate/{{template.id}}" class="edit-link">
+                <i title="You are the owner of this question template and can change this template." ui-jq="tooltip" data-placement="right"
+                   data-delay="500" class="icon-pencil template-edit" ng-show="getUserId() == template.owner"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="template-filter">
+    Show:&nbsp;
+    <input id="master" type="checkbox" ng-model="query.is_master"/><label for="master">Master</label>
+    <a href="#/newTemplate" class="btn pull-right">New</a>
+</div>

@@ -4,13 +4,16 @@ namespace Meot\FormBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation\ExclusionPolicy,
+    JMS\Serializer\Annotation\ReadOnly,
+    JMS\Serializer\Annotation\Exclude;
 
 /**
  * Question
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ExclusionPolicy("none")
  */
 class Question
 {
@@ -41,8 +44,7 @@ class Question
     private $response_type;
 
     /**
-     * @ORM\OneToMany(targetEntity="Response", mappedBy="question")
-     * @Exclude
+     * @ORM\OneToMany(targetEntity="Response", mappedBy="question", cascade={"persist"})
      */
     private $responses;
 
@@ -50,9 +52,9 @@ class Question
      * if the question is public or private
      * @var boolean
      *
-     * @ORM\Column(name="is_public", type="boolean")
+     * @ORM\Column(name="is_public", type="boolean", nullable=true)
      */
-    private $is_public;
+    private $is_public = false;
 
     /**
      * if the question is master question, or otherwise can be edited
@@ -67,6 +69,7 @@ class Question
      * @var integer
      *
      * @ORM\Column(name="owner", type="integer")
+     * @ReadOnly
      */
     private $owner;
 
@@ -215,6 +218,7 @@ class Question
      */
     public function addResponse(\Meot\FormBundle\Entity\Response $responses)
     {
+        $responses->setQuestion($this);
         $this->responses[] = $responses;
 
         return $this;
