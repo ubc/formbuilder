@@ -16,6 +16,7 @@ class QuestionType extends AbstractType
             ->add('is_public')
             ->add('is_master')
             ->add('owner')
+            ->add('metadata')
             ->add('responses', 'collection', array(
                 'type' => new ResponseType(),
                 'allow_add'    => true,
@@ -33,6 +34,6 @@ class QuestionType extends AbstractType
 
     public function getName()
     {
-        return '';
+        return 'question';
     }
 }

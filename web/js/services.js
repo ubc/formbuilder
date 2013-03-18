@@ -1,17 +1,23 @@
 angular.module('questionServices', ['ngResource']).
     factory('Question', function($resource) {
-        var Question = $resource('app_dev.php/questions/:id', {}, {update: { method: 'PUT' }});
-
-//        Question.prototype.update = function(cb) {
-//            console.log(this.owner);
-//            return Question.update({id: this.id},
-//                angular.extend({}, this, {id:undefined}), cb);
-//        };
-
-        return Question;
+        return $resource('app_dev.php/questions/:id/:action', {id:"@id"}, {
+            update: { method: 'PUT' },
+            copy: {method: "POST", params: {action: "copy"}}
+        });
     });
 
 angular.module('formServices', ['ngResource']).
     factory('Form', function($resource) {
-        return $resource('app.php/forms/:id', {}, {});
+        var Form = $resource('app_dev.php/forms/:id', {id:"@id"}, {
+            update: { method: 'PUT' }
+        });
+
+        // set up default values
+        Form.prototype.id = undefined;
+        Form.prototype.name = "Untitled Form";
+        Form.prototype.header = "<h2>Default Header</h2>";
+        Form.prototype.footer = "<h2>Default Footer</h2>";
+        Form.prototype.questions = [];
+
+        return Form;
     });

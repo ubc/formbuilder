@@ -1,0 +1,13 @@
+<tabs class="form-selector">
+    <pane heading="All Forms">
+        <ul class="unstyled">
+            <li ng-repeat="form in formlist" class="form-item"><a ng-click="onselect(form.id)">{{ form.name }}</a></li>
+        </ul>
+    </pane>
+    <pane heading="My Forms" active="pane.active">
+        <ul class="unstyled">
+            <li ng-repeat="form in formlist" class="form-item"><a ng-click="onselect(form.id)">{{ form.name }}</a></li>
+        </ul>
+    </pane>
+
+</tabs>

@@ -58,13 +58,13 @@ class Form
     private $owner;
 
     /**
-     * @ORM\OneToMany(targetEntity="FormQuestion", mappedBy="form")
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="form", cascade={"persist"})
      **/
-    private $form_questions;
+    private $questions;
 
     public function __construct()
     {
-        $this->form_questions = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
 
     /**
@@ -192,41 +192,42 @@ class Form
         return $this->owner;
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     /**
-     * Add form_questions
+     * Add questions
      *
-     * @param \Meot\FormBundle\Entity\FormQuestion $formQuestions
+     * @param \Meot\FormBundle\Entity\Question $questions
      * @return Form
      */
-    public function addFormQuestion(\Meot\FormBundle\Entity\FormQuestion $formQuestions)
+    public function addQuestion(\Meot\FormBundle\Entity\Question $questions)
     {
-        $this->form_questions[] = $formQuestions;
+        $questions->setForm($this);
+        $this->questions[] = $questions;
 
         return $this;
     }
 
     /**
-     * Remove form_questions
+     * Remove questions
      *
-     * @param \Meot\FormBundle\Entity\FormQuestion $formQuestions
+     * @param \Meot\FormBundle\Entity\Question $questions
      */
-    public function removeFormQuestion(\Meot\FormBundle\Entity\FormQuestion $formQuestions)
+    public function removeQuestion(\Meot\FormBundle\Entity\Question $questions)
     {
-        $this->form_questions->removeElement($formQuestions);
+        $this->questions->removeElement($questions);
     }
 
     /**
-     * Get form_questions
+     * Get questions
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormQuestions()
+    public function getQuestions()
     {
-        return $this->form_questions;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
+        return $this->questions;
     }
 }

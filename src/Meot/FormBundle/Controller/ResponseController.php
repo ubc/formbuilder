@@ -23,7 +23,6 @@ class ResponseController extends FosRestController implements ClassResourceInter
      * Get all responses for question
      *
      * @ApiDoc(
-     *  output="Meot\FormBundle\Entity\Response",
      *  statusCodes={
      *      200="Returned when successful",
      *      404="Returned when getting responses from non-existing question"

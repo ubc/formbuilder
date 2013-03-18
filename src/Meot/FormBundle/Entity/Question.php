@@ -31,7 +31,7 @@ class Question
      * Question prompt text
      * @var string
      *
-     * @ORM\Column(name="text", type="text")
+     * @ORM\Column(name="question_text", type="text")
      */
     private $text;
 
@@ -74,15 +74,23 @@ class Question
     private $owner;
 
     /**
-     * @ORM\OneToMany(targetEntity="FormQuestion", mappedBy="questions")
+     * Question metadata
+     * @var string
+     *
+     * @ORM\Column(name="metadata", type="text", nullable=true)
+     */
+    private $metadata;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Form", inversedBy="questions")
+     * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      * @Exclude
-     **/
-    private $form_questions;
+     */
+    private $form;
 
     public function __construct()
     {
         $this->responses = new ArrayCollection();
-        $this->form_questions = new ArrayCollection();
     }
 
     /**
@@ -244,41 +252,69 @@ class Question
         return $this->responses;
     }
 
+    public function __toString()
+    {
+        return $this->text;
+    }
+
     /**
-     * Add form_questions
+     * Set metadata
      *
-     * @param \Meot\FormBundle\Entity\FormQuestion $formQuestions
+     * @param string $metadata
      * @return Question
      */
-    public function addFormQuestion(\Meot\FormBundle\Entity\FormQuestion $formQuestions)
+    public function setMetadata($metadata)
     {
-        $this->form_questions[] = $formQuestions;
+        $this->metadata = $metadata;
 
         return $this;
     }
 
     /**
-     * Remove form_questions
+     * Get metadata
      *
-     * @param \Meot\FormBundle\Entity\FormQuestion $formQuestions
+     * @return string
      */
-    public function removeFormQuestion(\Meot\FormBundle\Entity\FormQuestion $formQuestions)
+    public function getMetadata()
     {
-        $this->form_questions->removeElement($formQuestions);
+        return $this->metadata;
+    }
+
+    public function __clone()
+    {
+        // If the entity has an identity, proceed as normal.
+        if ($this->id) {
+            // ... Your code here as normal ...
+            $oldResponses = $this->responses;
+            $this->responses = new ArrayCollection();
+            foreach ($oldResponses as $response) {
+                $r = clone $response;
+                $this->addResponse($r);
+            }
+        }
+        // otherwise do nothing, do NOT throw an exception!
     }
 
     /**
-     * Get form_questions
+     * Set form
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \Meot\FormBundle\Entity\Form $form
+     * @return Question
      */
-    public function getFormQuestions()
+    public function setForm(\Meot\FormBundle\Entity\Form $form = null)
     {
-        return $this->form_questions;
+        $this->form = $form;
+
+        return $this;
     }
 
-    public function __toString()
+    /**
+     * Get form
+     *
+     * @return \Meot\FormBundle\Entity\Form
+     */
+    public function getForm()
     {
-        return $this->text;
+        return $this->form;
     }
 }

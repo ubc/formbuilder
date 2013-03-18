@@ -4,18 +4,20 @@
 </ul>
 <div id="question-template-list">
     <ul class="nav nav-list">
-        <li class="question-template" draggable='{connectToSortable: "#question-list", helper: "clone", revert: "invalid"}' ng-repeat="template in templates| filter:query" data-template-id="{{template.id}}">
+        <li class="question-template" draggable='{helper: "clone", revert: "invalid"}'
+            ng-repeat="template in templates| filter:query | mytemplate:is_mine" data-template-id="{{template.id}}"
+            ng-switch="getUserId() == template.owner">
             <p>{{template.text | truncate:180}}</p>
-            <i title="This question is a master question template and it is shared with others." ui-jq="tooltip" data-placement="right" data-delay="500" class="icon-lock template-lock" ng-show="template.is_master"></i>
-            <a ng-href="#/editTemplate/{{template.id}}" class="edit-link">
-                <i title="You are the owner of this question template and can change this template." ui-jq="tooltip" data-placement="right"
-                   data-delay="500" class="icon-pencil template-edit" ng-show="getUserId() == template.owner"></i>
+            <i title="This question is a shared template owned by others." ui-jq="tooltip" data-placement="right" data-delay="500" class="icon-lock template-lock" ng-switch-when="false"></i>
+            <a ng-href="#/editTemplate/{{template.id}}" class="edit-link"  ng-switch-when="true">
+                <i title="You are the owner of this question template and can change it." ui-jq="tooltip" data-placement="right"
+                   data-delay="500" class="icon-pencil template-edit"></i>
             </a>
         </li>
     </ul>
 </div>
 <div id="template-filter">
     Show:&nbsp;
-    <input id="master" type="checkbox" ng-model="query.is_master"/><label for="master">Master</label>
+    <input id="mine" type="checkbox" ng-model="is_mine"/><label for="mine">Mine Only</label>
     <a href="#/newTemplate" class="btn pull-right">New</a>
 </div>

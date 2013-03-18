@@ -26,6 +26,6 @@ class ResponseType extends AbstractType
 
     public function getName()
     {
-        return '';
+        return 'response';
     }
 }

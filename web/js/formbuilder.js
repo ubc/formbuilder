@@ -1,4 +1,4 @@
-var formBuilderApp = angular.module("FormBuilder", ['questionServices', 'ui']).
+var formBuilderApp = angular.module("FormBuilder", ['questionServices', 'formServices', 'ui', 'ui.bootstrap']).
     config(function($routeProvider){
         $routeProvider.
             when('/', {controller:QuestionTemplateCtrl, templateUrl:'partials/template-list.html'}).
@@ -6,6 +6,24 @@ var formBuilderApp = angular.module("FormBuilder", ['questionServices', 'ui']).
             when('/editTemplate/:templateId', {controller:QuestionTemplateEditCtrl, templateUrl:'partials/edit-template.html'}).
             otherwise({redirectTo:'/'});
     });
+
+// filter to show the templates owned by user
+formBuilderApp.filter("mytemplate", function() {
+    return function (input, is_mine) {
+        // no filter
+        if (is_mine == undefined || is_mine == false) {
+            return input;
+        }
+
+        var out = [];
+        for(var i = 0; i < input.length; i++) {
+            if (input[i].owner == userId) {
+                out.push(input[i]);
+            }
+        }
+        return out;
+    }
+})
 
 formBuilderApp.filter("truncate", function () {
     return function (text, length, end) {
@@ -25,14 +43,6 @@ formBuilderApp.filter("truncate", function () {
     };
 });
 
-//
-//formBuilderApp.factory("QuestionList", function() {
-//    return {
-//        message:"message from question list",
-//        questions:[{text:"aaa"},{text:"bbb"}]
-//    }
-//})
-
 // make the question templates loaded from server draggable
 formBuilderApp.directive("draggable", function() {
     return {
@@ -44,27 +54,23 @@ formBuilderApp.directive("draggable", function() {
     }
 })
 
-formBuilderApp.directive("droppable", function() {
+formBuilderApp.directive("droppable", function($rootScope) {
     return {
         restrict: 'A',
-        scope: {
-            drop:"&"
-        },
         link: function(scope, element, attrs) {
             var options = scope.$eval(attrs.droppable);
             $(element).droppable({
+                accept: ".question-template",
                 drop: function( event, ui ) {
                     var dragIndex = angular.element(ui.draggable).data('template-id');
-                    scope.drop({id:dragIndex});
+                    $rootScope.$broadcast('addQuestionEvent', {id:dragIndex});
                     element.removeClass('target-over');
                 },
                 over:function (event, ui) {
                     element.addClass('target-over');
-                    //ui.draggable.addClass('item-over');
                 },
                 out: function (event, ui) {
                     element.removeClass('target-over');
-                    //ui.draggable.removeClass('item-over');
                 }
             });
         }
@@ -77,45 +83,105 @@ formBuilderApp.directive("resizable", function() {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
-            var options = scope.$eval(attrs.resizable);
-            $(element).resizable(options)
+            // merge the default options with ones in attrs
+            var defaultOptions = {
+                autoHide: true,
+                handles: "e, s, w, se, sw",
+                stop: function(event, ui) {
+                    var model = eval("scope."+attrs.ngModel);
+                    console.log(model);
+                    model.metadata = $(element).attr('style');
+                }
+            }
+            var options = $.extend(defaultOptions, scope.$eval(attrs.resizable));
+
+            // make our element resizable
+            $(element).resizable(options);
+
+            // add css effect when mouse entering or leaving the element
             element.bind("mouseenter", function() {
                 //element.switchClass('editable', 'editing', 200);
                 element.addClass('editing');
+                element.children("div.handle").show();
             })
             element.bind("mouseleave", function() {
                 //element.switchClass('editing', 'editable', 200);
                 element.removeClass('editing');
+                element.children("div.handle").hide();
             })
         }
     }
 })
 
 formBuilderApp.directive('contenteditable', function() {
-        return {
-            restrict: 'A', // only activate on element attribute
-            require: '?ngModel', // get a hold of NgModelController
-            link: function(scope, element, attrs, ngModel) {
-                if(!ngModel) return; // do nothing if no ng-model
+    return {
+        restrict: 'A', // only activate on element attribute
+        require: '?ngModel', // get a hold of NgModelController
+        link: function(scope, element, attrs, ngModel) {
+            if(!ngModel) return; // do nothing if no ng-model
 
-                // Specify how UI should be updated
-                ngModel.$render = function() {
-                    element.html(ngModel.$viewValue || '');
-                };
+            // Specify how UI should be updated
+            ngModel.$render = function() {
+                element.html(ngModel.$viewValue || '');
+            };
 
-                // Listen for change events to enable binding
-                element.bind('blur keyup change', function() {
-                    scope.$apply(read);
-                });
-                read(); // initialize
+            // Listen for change events to enable binding
+            element.bind('blur keyup change', function() {
+                scope.$apply(read);
+            });
 
-                // Write data to the model
-                function read() {
-                    ngModel.$setViewValue(element.html());
-                }
+            //read(); // initialize
+
+            // Write data to the model
+            function read() {
+                ngModel.$setViewValue(element.html());
             }
-        };
-    });
+        }
+    };
+});
+
+formBuilderApp.directive('formSelector', function(Form) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        templateUrl: 'partials/form-selector.html',
+        link: function(scope, element, attrs, ngModel) {
+            scope.formlist = Form.query();
+            // event when a form is selected
+            scope.onselect = function(form_id) {
+                // update model value
+                ngModel.$setViewValue(form_id);
+            }
+        }
+    }
+});
+
+formBuilderApp.directive('editable', function() {
+    return {
+        restrict: 'C',
+        link: function(scope, element, attrs) {
+            element.hallo({
+                plugins: {
+                    'halloformat': {},
+                    'halloheadings':{},
+                    'hallojustify':{},
+                    'hallolists':{},
+                    'halloreundo':{}
+//            'halloimage':{}
+                }
+            })
+        }
+    }
+})
+
+formBuilderApp.directive('response-checkbox', function() {
+    return {
+        restrict: 'C',
+        link: function(scope, element, attrs) {
+            console.log(scope.response);
+        }
+    }
+})
 
 function QuestionTemplateCtrl($scope, Question) {
     // default filter parameters
@@ -150,6 +216,11 @@ function QuestionTemplateEditCtrl($scope, $location, $routeParams, Question) {
         // some clean up before saving
         if ($scope.template.response_type == 1 || $scope.template.response_type == 2) {
             $scope.template.responses = undefined;
+        } else {
+            // remove ids from responses
+            for(var i=0; i<$scope.template.responses.length; i++) {
+                $scope.template.responses[i].id = undefined;
+            }
         }
         if ($scope.template.is_master == false) {
             $scope.template.is_master = undefined;
@@ -160,7 +231,7 @@ function QuestionTemplateEditCtrl($scope, $location, $routeParams, Question) {
         var id = $scope.template.id;
         $scope.template.id = undefined;
 
-        Question.update({id: id}, $scope.template, function() {
+        Question.update({id: id}, {"question": $scope.template}, function() {
             $location.path('/');
         });
 
@@ -188,10 +259,12 @@ function QuestionTemplateNewCtrl($scope, $location, Question) {
         if ($scope.template.response_type == 1 || $scope.template.response_type == 2) {
             $scope.template.responses = undefined;
         }
-        if ($scope.template.is_master == false) {
-            $scope.template.is_master = undefined;
+        if ($scope.template.is_public == false) {
+            $scope.template.is_public = undefined;
         }
-        Question.save($scope.template, function() {
+        // this is a template question
+        $scope.template.is_master = true;
+        Question.save({question: $scope.template}, function() {
            $location.path('/');
         });
     }
@@ -210,27 +283,166 @@ function QuestionTemplateNewCtrl($scope, $location, Question) {
     }
 }
 
-function FormCtrl($scope, Question) {
-    $scope.form = {
-        questions:[]
-    };
+function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
 
-    $scope.addQuestion = function(id){
-        Question.get({id:id}, function(question){
-            $scope.form.questions.push(question);
-        });
+    var self = this;
+    $scope.form = new Form();
+
+    var resetForm = function () {
+        $scope.form.id = undefined;
+        $scope.form.name = "Untitled Form";
+        $scope.form.header = "<h2>Default Header</h2>";
+        $scope.form.footer = "<h2>Default Footer</h2>";
+        $scope.form.questions = [];
+        self.form = new Form($scope.form);
     }
 
-    //$(".form-element").sortable();
-    $("ul, li").disableSelection();
-    $("div.editable").hallo({
-        plugins: {
-            'halloformat': {},
-            'halloheadings':{},
-            'hallojustify':{},
-            'hallolists':{},
-            'halloreundo':{}
-//            'halloimage':{}
+    function isDirty () {
+        return !angular.equals($scope.form, self.form);
+    }
+
+    resetForm();
+
+    $scope.sortableOptions = {
+        placeholder: "ui-state-highlight",
+        distance: 5,
+        handle: ".handle"
+    }
+
+    $scope.$on('addQuestionEvent', function(event, params) {
+        Question.get({id:params.id}, function(question){
+            // remove question id
+            question.id = undefined;
+            // remove response ids
+            for(var j=0; j < question.responses.length; j++) {
+                question.responses[j].id = undefined;
+            }
+            $scope.form.questions.push(question);
+        });
+    });
+
+    // conflicting with contenteditable
+    //$("ul, li").disableSelection();
+
+    /**
+     * event handlers
+     */
+    $scope.$on('saveEvent', function(event, callback) {
+        // save if there is no form id
+        if ($scope.form.id == undefined) {
+            Form.save({form: $scope.form}, function(response, headers) {
+                // parse form id from location
+                var location = headers("location");
+                $scope.form.id = location.match(/\/forms\/(.*)$/)[1];
+                // sync the form to self.form
+                self.form = angular.copy($scope.form);
+
+                if (callback != undefined) {
+                    callback();
+                }
+            })
+        } else {
+            var form_id = $scope.form.id;
+            $scope.form.id = undefined;
+
+            var questions = $scope.form.questions.slice(0);
+
+            for (var i = 0; i < $scope.form.questions.length; i++) {
+                $scope.form.questions[i].id = undefined;
+                for(var j=0; j < $scope.form.questions[i].responses.length; j++) {
+                    $scope.form.questions[i].responses[j].id = undefined;
+                }
+            }
+
+            Form.update({id: form_id}, {form: $scope.form}, function(response) {
+                // sync the form to self.form
+                self.form = angular.copy($scope.form);
+
+                if (callback != undefined) {
+                    callback();
+                }
+            });
+            $scope.form.id = form_id;
         }
     });
+
+    $scope.$on('newEvent', function(event) {
+        // check if the form is dirty
+        if (isDirty()) {
+            var msgbox = $dialog.messageBox('Save Form?', 'The form has been changed. Do you want to save it before continue?', [{label:'Yes', result: 'yes'},{label:'Discard', result: 'no'}]);
+            msgbox.open().then(function(result){
+                if(result === 'yes') {
+                    $rootScope.$broadcast('saveEvent', resetForm);
+                } else {
+                    resetForm();
+                }
+            });
+        } else {
+            resetForm();
+        }
+    })
+
+    $scope.$on('loadEvent', function(event) {
+        console.log('load');
+
+        function loadForm() {
+            var t = '<div class="modal-header">Forms</div>'+
+                '<div class="modal-body" form-selector ng-model="selectedform"></div>' +
+                '<div class="modal-footer"><button ng-click="close(result)" class="btn btn-primary" >Close</button></div>'
+            '</div>';
+            var d = $dialog.dialog({template: t, controller: 'FormLoadController'});
+            d.open().then(function(result){
+                if (result != undefined) {
+                    // user selected a form to load
+                    Form.get({id:result}, function(form) {
+                        $scope.form = angular.copy(form);
+                        // sync the form to self.form
+                        self.form = angular.copy($scope.form);
+                    });
+                }
+            });
+        }
+
+        // check if the form is dirty
+        if (isDirty()) {
+            var msgbox = $dialog.messageBox('Save Form?', 'The form has been changed. Do you want to save it before continue?', [{label:'Yes', result: 'yes'},{label:'Discard', result: 'no'}]);
+            msgbox.open().then(function(result){
+                if(result === 'yes') {
+                    $rootScope.$broadcast('saveEvent', loadForm);
+                } else {
+                    loadForm();
+                }
+            });
+        } else {
+            loadForm();
+        }
+
+
+    })
+}
+
+function MenuCtrl($scope, $rootScope) {
+    $scope.save = function() {
+        $rootScope.$broadcast('saveEvent');
+    }
+    $scope.new = function() {
+        $rootScope.$broadcast('newEvent');
+    }
+    $scope.load = function() {
+        $rootScope.$broadcast('loadEvent');
+    }
+}
+
+function FormLoadController($scope, dialog) {
+    // watch if user select a form, then close the dialog
+    $scope.$watch('selectedform', function() {
+        if ($scope.selectedform != undefined) {
+            dialog.close($scope.selectedform);
+        }
+    })
+
+    // if user close the dialog without selecting a form
+    $scope.close = function(result) {
+        dialog.close($scope.selectedform);
+    }
 }

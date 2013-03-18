@@ -2,269 +2,54 @@
 
 namespace Meot\FormBundle\Tests\Controller;
 
-use Meot\FormBundle\Tests\FunctionalTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class QuestionControllerTest extends FunctionalTestCase
+class QuestionControllerTest extends WebTestCase
 {
-    public static function setUpBeforeClass()
+    /*
+    public function testCompleteScenario()
     {
-        static::initialize();
-    }
-
-    public function testGet()
-    {
+        // Create a new client to browse the application
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/questions.json');
-        $response = $client->getResponse();
+        // Create a new entry in the database
+        $crawler = $client->request('GET', '/question/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /question/");
+        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
 
-        $this->assertJsonResponse($response, 200);
+        // Fill in the form and submit it
+        $form = $crawler->selectButton('Create')->form(array(
+            'meot_formbundle_questiontype[field_name]'  => 'Test',
+            // ... other fields to fill
+        ));
 
-        $questions = json_decode($response->getContent());
-        $this->assertEquals(3, count($questions));
-        $this->assertEquals(1, $questions[0]->id);
-        $this->assertEquals(2, $questions[1]->id);
-        $this->assertEquals(3, $questions[2]->id);
+        $client->submit($form);
+        $crawler = $client->followRedirect();
 
+        // Check data in the show view
+        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
+
+        // Edit the entity
+        $crawler = $client->click($crawler->selectLink('Edit')->link());
+
+        $form = $crawler->selectButton('Edit')->form(array(
+            'meot_formbundle_questiontype[field_name]'  => 'Foo',
+            // ... other fields to fill
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Check the element contains an attribute with value equals "Foo"
+        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
+
+        // Delete the entity
+        $client->submit($crawler->selectButton('Delete')->form());
+        $crawler = $client->followRedirect();
+
+        // Check the entity has been delete on the list
+        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
     }
 
-    public function testPost()
-    {
-        $client = static::createClient();
-        $crawler = $client->request(
-            'POST', '/questions.json', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            '{"question":{"text":"Question 4", "response_type":1, "is_public":0, "is_master":0, "owner":2}}'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 201);
-
-        // verify against database
-        $questions = $this->entityManager->getRepository('MeotFormBundle:Question')->findAll();
-        $this->assertEquals(4, count($questions));
-
-        // test missing field
-        $crawler = $client->request(
-            'POST', '/questions.json', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            '{"question":{"response_type":1, "is_public":0, "is_master":0, "owner":2}}'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 500);
-    }
-
-    public function testGetObject()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/questions/1.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 200);
-
-        $question = json_decode($response->getContent());
-
-        $expected = $this->entityManager->find('MeotFormBundle:Question', 1);
-        $this->assertEquals($expected->getId(), $question->id);
-        $this->assertEquals($expected->getText(), $question->text);
-
-        // get non existing object
-        $crawler = $client->request('GET', '/questions/999.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-    }
-
-    public function testPut()
-    {
-        $client = static::createClient();
-        $crawler = $client->request(
-            'PUT', '/questions/2.json', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            '{"question":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 204);
-
-        // verify against database
-        $result = $this->entityManager->find('MeotFormBundle:Question', 2);
-        $this->assertEquals(2, $result->getId());
-        $this->assertEquals("Question 2 updated", $result->getText());
-        // to set boolean to false, the field should be absent from json request
-        $this->assertFalse($result->getIsMaster());
-
-        // update a non-existing object
-        $client = static::createClient();
-        $crawler = $client->request(
-            'PUT', '/questions/999.json', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            '{"question":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-    }
-
-    public function testDelete()
-    {
-        $client = static::createClient();
-        $crawler = $client->request(
-            'DELETE', '/questions/3.json'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 204);
-
-        $result = $this->entityManager->find('MeotFormBundle:Question', 3);
-        $this->assertEquals(null, $result);
-
-        // delete non-existing object
-        $crawler = $client->request(
-            'DELETE', '/questions/999.json'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-    }
-
-    public function testResponseGet()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/questions/1/responses.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 200);
-
-        $result = json_decode($response->getContent());
-        $this->assertEquals(3, count($result));
-        $this->assertEquals('Response 1', $result[0]->text);
-        $this->assertEquals('Response 2', $result[1]->text);
-        $this->assertEquals('Response 3', $result[2]->text);
-
-        // try to get responses for non-existing question
-        $crawler = $client->request('GET', '/questions/999/responses.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-
-    }
-
-    public function testResponsePost()
-    {
-        $client = static::createClient();
-        $crawler = $client->request(
-            'POST', '/questions/2/responses.json', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            '{"response":{"text":"Response 10", "question":2}}'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 201);
-
-        // verify against database
-        $result = $this->entityManager->getRepository('MeotFormBundle:Response')->findByQuestion(2);
-        $this->assertEquals(3, count($result));
-
-        // test post response to non-existing question
-        $crawler = $client->request(
-            'POST', '/questions/999/responses.json', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            '{"response":{"text":"Response 10", "question":2}}'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-        // response should not be inserted
-        $result = $this->entityManager->getRepository('MeotFormBundle:Response')->findByQuestion(999);
-        $this->assertEquals(array(), $result);
-    }
-
-    public function testResponseGetObject()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/questions/1/responses/1.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 200);
-
-        $result = json_decode($response->getContent());
-
-        $expected = $this->entityManager->find('MeotFormBundle:Response', 1);
-        $this->assertEquals($expected->getId(), $result->id);
-        $this->assertEquals($expected->getText(), $result->text);
-        $this->assertEquals($expected->getQuestion()->getId(), $result->question->id);
-
-        // get non existing object
-        $crawler = $client->request('GET', '/questions/1/responses/999.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-
-        $crawler = $client->request('GET', '/questions/999/responses/1.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-
-        $crawler = $client->request('GET', '/questions/999/responses/999.json');
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-    }
-
-    public function testResponseDelete()
-    {
-        $client = static::createClient();
-        $crawler = $client->request(
-            'DELETE', '/questions/2/responses/5.json'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 204);
-
-        $result = $this->entityManager->find('MeotFormBundle:Response', 5);
-        $this->assertEquals(null, $result);
-
-        // delete non-existing object
-        $crawler = $client->request(
-            'DELETE', '/questions/2/responses/999.json'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-
-        $crawler = $client->request(
-            'DELETE', '/questions/999/responses/4.json'
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertJsonResponse($response, 404);
-    }
-
-    protected function assertJsonResponse($response, $statusCode = 200)
-    {
-        $this->assertEquals(
-            $statusCode, $response->getStatusCode(),
-            $response->getContent()
-        );
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json'),
-            $response->headers
-        );
-    }
+    */
 }

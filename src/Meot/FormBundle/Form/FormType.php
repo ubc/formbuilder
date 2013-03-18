@@ -16,6 +16,11 @@ class FormType extends AbstractType
             ->add('footer')
             ->add('is_public')
             ->add('owner')
+            ->add('questions', 'collection', array(
+                'type' => new QuestionType(),
+                'allow_add'    => true,
+                'by_reference' => false,
+            ))
         ;
     }
 
@@ -29,6 +34,6 @@ class FormType extends AbstractType
 
     public function getName()
     {
-        return '';
+        return 'form';
     }
 }

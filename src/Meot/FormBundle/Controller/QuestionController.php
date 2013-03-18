@@ -24,7 +24,6 @@ class QuestionController extends FosRestController implements ClassResourceInter
      *
      * @ApiDoc(
      *  resource=true,
-     *  output="Meot\FormBundle\Entity\Question",
      *  statusCodes={
      *      200="Returned when successful"},
      *  filters={
@@ -54,7 +53,6 @@ class QuestionController extends FosRestController implements ClassResourceInter
      * @return question object
 
      * @ApiDoc(
-     *  output="Meot\FormBundle\Entity\Question",
      *  statusCodes={
      *      200="Returned when successful",
      *      404="Returned when no question found"}
@@ -114,8 +112,8 @@ class QuestionController extends FosRestController implements ClassResourceInter
         $form->bind($request);
 
         if ($form->isValid()) {
+            $entity->setOwner(1);
             $em = $this->getDoctrine()->getManager();
-            $entity->setOwner(0);
             $em->persist($entity);
             $em->flush();
 
@@ -200,5 +198,36 @@ class QuestionController extends FosRestController implements ClassResourceInter
         $em->flush();
 
         return $this->view(null, Codes::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Copy a question
+     *
+     * @param int $id id of the resource
+     *
+     * @return View view instance
+     *
+     * @Route("/questions/{id}/copy.{_format}", name="copy_question", requirements={"id" = "\d+"}, defaults={"_format" = "json"})
+     * @Method("POST")
+     * @Rest\View()
+     * @ApiDoc(
+     *  statusCodes={
+     *      204="Returned when successful",
+     *      404="Returned when no question found"}
+     * )
+     */
+    public function copyAction(Question $entity)
+    {
+        $newEntity = clone $entity;
+
+        // copied questions are not master questions
+        $newEntity->setIsPublic(false);
+        $newEntity->setIsMaster(false);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newEntity);
+        $em->flush();
+
+        return $newEntity;
     }
 }

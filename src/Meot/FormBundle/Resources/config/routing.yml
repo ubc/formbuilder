@@ -10,8 +10,3 @@ responses:
 forms:
     type:     rest
     resource: Meot\FormBundle\Controller\FormController
-
-form_questions:
-    type:     rest
-    parent:   forms
-    resource: Meot\FormBundle\Controller\FormQuestionController

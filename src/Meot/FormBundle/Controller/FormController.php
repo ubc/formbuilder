@@ -25,7 +25,6 @@ class FormController extends FosRestController implements ClassResourceInterface
      *
      * @ApiDoc(
      *  resource=true,
-     *  output="Meot\FormBundle\Entity\Form",
      *  statusCodes={
      *      200="Returned when successful"},
      *  filters={
@@ -55,7 +54,6 @@ class FormController extends FosRestController implements ClassResourceInterface
      * @return question object
 
      * @ApiDoc(
-     *  output="Meot\FormBundle\Entity\Form",
      *  statusCodes={
      *      200="Returned when successful",
      *      404="Returned when no form found"}
@@ -95,6 +93,9 @@ class FormController extends FosRestController implements ClassResourceInterface
         $form->bind($request);
 
         if ($form->isValid()) {
+            $user = $this->getUser();
+            //$entity->setOwner($user->getUsername());
+            $entity->setOwner(1);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -129,7 +130,7 @@ class FormController extends FosRestController implements ClassResourceInterface
      *
      * @return View view instance
      *
-     * @Route("/forms/{id}.{_format}", name="put_form", requirements={"id" = "\d+"})
+     * @Route("/forms/{id}.{_format}", name="put_form", requirements={"id" = "\d+"}, defaults={"_format" = "json"})
      * @Method("PUT")
      * @Rest\View()
      * @ApiDoc(
@@ -164,7 +165,7 @@ class FormController extends FosRestController implements ClassResourceInterface
      *
      * @return View view instance
      *
-     * @Route("/forms/{id}.{_format}", name="delete_form", requirements={"id" = "\d+"})
+     * @Route("/forms/{id}.{_format}", name="delete_form", requirements={"id" = "\d+"}, defaults={"_format" = "json"})
      * @Method("DELETE")
      * @Rest\View()
      * @ApiDoc(

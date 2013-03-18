@@ -24,7 +24,7 @@ class Response
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="text")
+     * @ORM\Column(name="response_text", type="text")
      */
     private $text;
 
@@ -76,14 +76,14 @@ class Response
     public function setQuestion(\Meot\FormBundle\Entity\Question $question = null)
     {
         $this->question = $question;
-    
+
         return $this;
     }
 
     /**
      * Get question
      *
-     * @return \Meot\FormBundle\Entity\Question 
+     * @return \Meot\FormBundle\Entity\Question
      */
     public function getQuestion()
     {
