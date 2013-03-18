@@ -4,8 +4,7 @@ namespace Meot\FormBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Meot\FormBundle\Entity\Form,
-    Meot\FormBundle\Entity\FormQuestion;
+use Meot\FormBundle\Entity\Form;
 
 class LoadFormData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -41,7 +40,7 @@ class LoadFormData extends AbstractFixture implements OrderedFixtureInterface
 
         $manager->persist($f3);
 
-        $q1 = new FormQuestion();
+/*        $q1 = new FormQuestion();
         $q1->setForm($f1);
         $q1->setQuestion($this->getReference('q1'));
         $q1->setOrder(1);
@@ -68,8 +67,8 @@ class LoadFormData extends AbstractFixture implements OrderedFixtureInterface
         $q5 = new FormQuestion();
         $q5->setForm($f2);
         $q5->setQuestion($this->getReference('q2'));
-        $q5->setOrder(5);
-        $manager->persist($q5);
+        $q5->setOrder(1);
+        $manager->persist($q5);*/
 
         $manager->flush();
     }

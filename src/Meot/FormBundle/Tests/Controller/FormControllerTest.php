@@ -142,7 +142,7 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertJsonResponse($response, 404);
     }
 
-    public function testQuestionGet()
+/*    public function testQuestionGet()
     {
         $client = static::createClient();
 
@@ -261,17 +261,6 @@ class FormControllerTest extends FunctionalTestCase
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 404);
-    }
+    }*/
 
-    protected function assertJsonResponse($response, $statusCode = 200)
-    {
-        $this->assertEquals(
-            $statusCode, $response->getStatusCode(),
-            $response->getContent()
-        );
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json'),
-            $response->headers
-        );
-    }
 }

@@ -48,4 +48,16 @@ abstract class FunctionalTestCase extends WebTestCase
         $this->entityManager = $container->get('doctrine')->getEntityManager();
     }
 
+    protected function assertJsonResponse($response, $statusCode = 200)
+    {
+        $this->assertEquals(
+            $statusCode, $response->getStatusCode(),
+            $response->getContent()
+        );
+        $this->assertTrue(
+            $response->headers->contains('Content-Type', 'application/json'),
+            $response->headers
+        );
+    }
+
 }

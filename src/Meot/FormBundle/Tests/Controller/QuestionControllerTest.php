@@ -2,54 +2,28 @@
 
 namespace Meot\FormBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Meot\FormBundle\Tests\FunctionalTestCase;
 
-class QuestionControllerTest extends WebTestCase
+class QuestionControllerTest extends FunctionalTestCase
 {
-    /*
-    public function testCompleteScenario()
+    public static function setUpBeforeClass()
     {
-        // Create a new client to browse the application
-        $client = static::createClient();
-
-        // Create a new entry in the database
-        $crawler = $client->request('GET', '/question/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /question/");
-        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
-
-        // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
-            'meot_formbundle_questiontype[field_name]'  => 'Test',
-            // ... other fields to fill
-        ));
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-
-        // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
-
-        // Edit the entity
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
-
-        $form = $crawler->selectButton('Edit')->form(array(
-            'meot_formbundle_questiontype[field_name]'  => 'Foo',
-            // ... other fields to fill
-        ));
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-
-        // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
-
-        // Delete the entity
-        $client->submit($crawler->selectButton('Delete')->form());
-        $crawler = $client->followRedirect();
-
-        // Check the entity has been delete on the list
-        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
+        static::initialize();
     }
 
-    */
+    public function testGet()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/questions.json');
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 200);
+
+        $result = json_decode($response->getContent());
+        $this->assertEquals(3, count($result));
+        $this->assertEquals(1, $result[0]->id);
+        $this->assertEquals(2, $result[1]->id);
+        $this->assertEquals(3, $result[2]->id);
+    }
 }
