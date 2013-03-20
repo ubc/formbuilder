@@ -174,11 +174,32 @@ formBuilderApp.directive('editable', function() {
     }
 })
 
-formBuilderApp.directive('response-checkbox', function() {
+// this directive enables the rotations on the checkbox and radio responses
+formBuilderApp.directive('responseCheckbox', function() {
     return {
         restrict: 'C',
         link: function(scope, element, attrs) {
-            console.log(scope.response);
+            var aElement = angular.element('<i class="icon-refresh rotation-handle" ></i>');
+            element.append(aElement);
+            aElement.hide();
+            aElement.bind('click', function() {
+                _.each(scope.question.responses, function(value) {
+                    if (value.classes == undefined) {
+                        value.classes = ["inline"];
+                    } else if (_.indexOf(value.classes, "inline") != -1) {
+                        value.classes = _.without(value.classes, "inline");
+                    } else {
+                        value.classes.push("inline");
+                    }
+                })
+                scope.$apply();
+            })
+            element.bind("mouseenter", function() {
+                aElement.show();
+            })
+            element.bind("mouseleave", function() {
+                aElement.hide();
+            })
         }
     }
 })

@@ -127,3 +127,13 @@ ul#question-list li:first-child {
     height: 100%;
     display: none;
 }
+
+.response-checkbox, .response-radio {
+    position: relative;
+}
+
+.rotation-handle {
+    position: absolute;
+    top: 4px;
+    left: -5px;
+}
