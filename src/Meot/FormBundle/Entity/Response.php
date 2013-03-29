@@ -29,6 +29,20 @@ class Response
     private $text;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="classes", type="string", length=255, nullable=true)
+     */
+    private $classes;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="metadata", type="string", length=255, nullable=true)
+     */
+    private $metadata;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="responses")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
@@ -88,5 +102,55 @@ class Response
     public function getQuestion()
     {
         return $this->question;
+    }
+
+    /**
+     * Set classes
+     *
+     * @param string $classes
+     * @return Response
+     */
+    public function setClasses($classes)
+    {
+        if (is_array($classes)) {
+            $this->classes = join('', $classes);
+        } else {
+            $this->classes = $classes;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get classes
+     *
+     * @return string
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
+
+    /**
+     * Set metadata
+     *
+     * @param string $metadata
+     * @return Response
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
+
+        return $this;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return string
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
     }
 }

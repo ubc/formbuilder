@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\ExclusionPolicy,
     JMS\Serializer\Annotation\ReadOnly,
+    JMS\Serializer\Annotation\AccessType,
+    JMS\Serializer\Annotation\Type,
     JMS\Serializer\Annotation\Exclude;
 
 /**
@@ -77,9 +79,19 @@ class Question
      * Question metadata
      * @var string
      *
+     * @AccessType("public_method")
+     * @Type("array<string, string>")
      * @ORM\Column(name="metadata", type="text", nullable=true)
      */
     private $metadata;
+
+    /**
+     * Metadata for response (single line text or textarea)
+     * @var string
+     *
+     * @ORM\Column(name="response_metadata", type="text", nullable=true)
+     */
+    private $response_metadata;
 
     /**
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="questions")
@@ -260,12 +272,20 @@ class Question
     /**
      * Set metadata
      *
-     * @param string $metadata
+     * @param array $metadata
      * @return Question
      */
     public function setMetadata($metadata)
     {
-        $this->metadata = $metadata;
+        if (is_array($metadata)) {
+            $tmp = array();
+            foreach ($metadata as $key => $value) {
+                $tmp[] = $key.':'.$value;
+            }
+            $this->metadata = implode(';', $tmp);
+        } else {
+            $this->metadata = $metadata;
+        }
 
         return $this;
     }
@@ -273,11 +293,25 @@ class Question
     /**
      * Get metadata
      *
-     * @return string
+     * @return array
      */
     public function getMetadata()
     {
-        return $this->metadata;
+        $tmp = explode(';', $this->metadata);
+        $ret = array();
+
+        foreach ($tmp as $element) {
+            if (empty($element)) {
+                continue;
+            }
+            $t = explode(':', $element);
+            if (count($t) != 2) {
+                continue;
+            }
+            $ret[$t[0]] = $t[1];
+        }
+
+        return $ret;
     }
 
     public function __clone()
@@ -316,5 +350,28 @@ class Question
     public function getForm()
     {
         return $this->form;
+    }
+
+    /**
+     * Set response_metadata
+     *
+     * @param string $responseMetadata
+     * @return Question
+     */
+    public function setResponseMetadata($responseMetadata)
+    {
+        $this->response_metadata = $responseMetadata;
+
+        return $this;
+    }
+
+    /**
+     * Get response_metadata
+     *
+     * @return string
+     */
+    public function getResponseMetadata()
+    {
+        return $this->response_metadata;
     }
 }

@@ -13,6 +13,8 @@ class ResponseType extends AbstractType
         $builder
             ->add('text')
             ->add('question')
+            ->add('classes')
+            ->add('metadata')
         ;
     }
 

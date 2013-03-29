@@ -17,6 +17,7 @@ class QuestionType extends AbstractType
             ->add('is_master')
             ->add('owner')
             ->add('metadata')
+            ->add('response_metadata')
             ->add('responses', 'collection', array(
                 'type' => new ResponseType(),
                 'allow_add'    => true,

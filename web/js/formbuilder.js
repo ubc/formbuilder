@@ -7,6 +7,41 @@ var formBuilderApp = angular.module("FormBuilder", ['questionServices', 'formSer
             otherwise({redirectTo:'/'});
     });
 
+function stringify(object) {
+    if (object instanceof String) {
+        return object;
+    }
+
+    var ret = [];
+
+    for(var prop in object) {
+        if (prop == undefined || prop == "") {
+            continue;
+        }
+        ret.push(prop+":"+object[prop]);
+    }
+    ret = ret.join(";");
+
+    return ret;
+}
+
+function objectify(string) {
+    if (string instanceof Object) {
+        return string;
+    }
+    var properties = string.split(';');
+    var obj = {};
+    properties.forEach(function(property) {
+        var tup = property.split(':');
+        if (tup[0] == undefined || tup[0] == "") {
+            return;
+        }
+        obj[tup[0]] = tup[1];
+    });
+
+    return obj;
+}
+
 // filter to show the templates owned by user
 formBuilderApp.filter("mytemplate", function() {
     return function (input, is_mine) {
@@ -89,12 +124,10 @@ formBuilderApp.directive("resizable", function() {
                 handles: "e, s, w, se, sw",
                 stop: function(event, ui) {
                     var model = eval("scope."+attrs.ngModel);
-                    console.log(model);
-                    model.metadata = $(element).attr('style');
+                    model.metadata = objectify($(element).attr('style'));
                 }
             }
             var options = $.extend(defaultOptions, scope.$eval(attrs.resizable));
-
             // make our element resizable
             $(element).resizable(options);
 
@@ -110,6 +143,21 @@ formBuilderApp.directive("resizable", function() {
                 element.children("div.handle").hide();
             })
         }
+    }
+})
+
+formBuilderApp.directive("storable", function() {
+    return function(scope, element, attrs) {
+        var defaultOptions = {
+            handles: "se",
+            stop: function(event, ui) {
+                scope.question.response_metadata = $(element).attr('style');
+            }
+        }
+        var options = $.extend(defaultOptions);
+
+        // make our element resizable
+        $(element).resizable(options);
     }
 })
 
@@ -184,7 +232,10 @@ formBuilderApp.directive('responseCheckbox', function() {
             aElement.hide();
             aElement.bind('click', function() {
                 _.each(scope.question.responses, function(value) {
-                    if (value.classes == undefined) {
+                    if (_.isString(value.classes)) {
+                        value.classes = value.classes.split(' ');
+                    }
+                    if (value.classes == undefined || value.classes == "") {
                         value.classes = ["inline"];
                     } else if (_.indexOf(value.classes, "inline") != -1) {
                         value.classes = _.without(value.classes, "inline");
@@ -369,7 +420,13 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
             var questions = $scope.form.questions.slice(0);
 
             for (var i = 0; i < $scope.form.questions.length; i++) {
+                // clean up the question ids
                 $scope.form.questions[i].id = undefined;
+                // clean up metadata to convert object to string so that backend will be happy
+//                if ($scope.form.questions[i].metadata instanceof Object) {
+//                    $scope.form.questions[i].metadata = stringify($scope.form.questions[i].metadata);
+//                }
+                // clean up the response Ids
                 for(var j=0; j < $scope.form.questions[i].responses.length; j++) {
                     $scope.form.questions[i].responses[j].id = undefined;
                 }
@@ -378,6 +435,13 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
             Form.update({id: form_id}, {form: $scope.form}, function(response) {
                 // sync the form to self.form
                 self.form = angular.copy($scope.form);
+
+//                for (var i = 0; i < $scope.form.questions.length; i++) {
+//                    // clean up metadata to convert object to string so that backend will be happy
+//                    if ($scope.form.questions[i].metadata instanceof String) {
+//                        $scope.form.questions[i].metadata = objectify($scope.form.questions[i].metadata);
+//                    }
+//                }
 
                 if (callback != undefined) {
                     callback();
@@ -417,6 +481,14 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
                     // user selected a form to load
                     Form.get({id:result}, function(form) {
                         $scope.form = angular.copy(form);
+                        $scope.form.questions.forEach(function(value) {
+                            // need to convert string into obj to make ng-style happy
+                            if (value.metadata == undefined) {
+                                return;
+                            }
+
+                            //value.metadata = objectify(value.metadata);
+                        })
                         // sync the form to self.form
                         self.form = angular.copy($scope.form);
                     });
