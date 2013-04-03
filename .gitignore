@@ -11,3 +11,4 @@ composer.lock
 Session.vim
 *.bak
 .idea
+*.swp
