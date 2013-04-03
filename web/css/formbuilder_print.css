@@ -1,0 +1,28 @@
+/* Hide all the UI control elements that shouldn't be printed. */
+
+#panel {
+    display: none;
+}
+
+#printBtn {
+    display: none;
+}
+
+.navbar {
+    display: none;
+}
+
+footer {
+    display: none;
+}
+
+/* Adjust spacing */
+
+#form-paper {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Precaution to not waste ink printing background color, etc, should be
+ * taken care of by the html5 boilerplate according to their docs */

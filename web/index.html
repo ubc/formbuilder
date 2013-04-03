@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="css/angular-ui.min.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/formbuilder.css">
+		<link rel="stylesheet" href="css/formbuilder_print.css" media="print">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
@@ -88,8 +89,8 @@
                     </div><!--/.well -->
                 </div><!--/span-->
                 <div class="span9" ng-controller="FormCtrl">
-                    <h4 class="editable pull-left" contenteditable="true" ng-model="form.name"></h4>
-                    <button class="btn pull-right"><i class="icon-print"> Print</i></button>
+                    <h2 class="editable pull-left" contenteditable="true" ng-model="form.name"></h2>
+                    <button id="printBtn" class="btn pull-right" onclick="window.print();"><i class="icon-print">Print</i></button>
                     <div class="clearfix"></div>
                     <div class="hero-unit" id="form-paper" droppable drop="addQuestion(id)">
                         <div class="editable" contenteditable="true" ng-model="form.header"></div>
@@ -118,9 +119,8 @@
                 </div><!--/span-->
             </div><!--/row-->
 
-            <hr>
-
             <footer>
+            <hr>
                 <p>&copy; <a href="http://ctlt.ubc.ca/">Centre for Teaching, Learning and Technology, UBC</a> 2013</p>
             </footer>
 
