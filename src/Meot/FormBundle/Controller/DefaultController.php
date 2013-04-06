@@ -13,24 +13,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/hello/{name}")
-     * @Template()
+     * @Route("/")
+     * @Template(engine="php")
      */
-    public function indexAction($name)
+    public function indexAction()
     {
-        return array('name' => $name);
-    }
-
-    /**
-     * @Route("/hello/{question}/new")
-     * @Template()
-     */
-    public function newAction(Question $question)
-    {
-        $response = new Response();
-
-        $form = $this->createForm(new ResponseType(), $response);
-
-        return array('form' => $form->createView());
+        return array();
     }
 }

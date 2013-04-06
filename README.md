@@ -16,6 +16,7 @@ This app is used for generating a survey form from a question bank.
 
 ## TODO
 
+* Instructions should make clear that the header and footer can contain both header and paragraph content.
 * In print preview, overly long headers will overflow instead of wrapping for some reason. Probably because the responsive css is setting the wrong width for printing?
 * Unhardcode `/app_dev.php/*` from all the API calls.
 * Find out why going to `/app_dev.php` doesn't work.

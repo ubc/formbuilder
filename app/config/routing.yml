@@ -1,11 +1,6 @@
-api:
-    type:     rest
+FormBundle:
     resource: "@MeotFormBundle/Resources/config/routing.yml"
-
-meot_form:
-    resource: "@MeotFormBundle/Controller/"
-    type:     annotation
-    prefix:   /
+    prefix: /
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"

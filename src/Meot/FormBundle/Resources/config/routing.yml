@@ -1,11 +1,10 @@
+index:
+    path: /
+    defaults: { _controller: MeotFormBundle:Default:index }
+
 questions:
     type:     rest
     resource: Meot\FormBundle\Controller\QuestionController
-
-responses:
-    type:     rest
-    parent:   questions
-    resource: Meot\FormBundle\Controller\ResponseController
 
 forms:
     type:     rest
