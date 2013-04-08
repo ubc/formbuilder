@@ -43,7 +43,7 @@ function objectify(string) {
 }
 
 // filter to show the templates owned by user
-formBuilderApp.filter("mytemplate", function() {
+formBuilderApp.filter("ownership", function() {
     return function (input, is_mine) {
         // no filter
         if (is_mine == undefined || is_mine == false) {
@@ -482,12 +482,9 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
                     Form.get({id:result}, function(form) {
                         $scope.form = angular.copy(form);
                         $scope.form.questions.forEach(function(value) {
-                            // need to convert string into obj to make ng-style happy
                             if (value.metadata == undefined) {
                                 return;
                             }
-
-                            //value.metadata = objectify(value.metadata);
                         })
                         // sync the form to self.form
                         self.form = angular.copy($scope.form);

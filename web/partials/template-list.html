@@ -5,7 +5,7 @@
 <div id="question-template-list">
     <ul class="nav nav-list">
         <li class="question-template" draggable='{helper: "clone", revert: "invalid"}'
-            ng-repeat="template in templates| filter:query | mytemplate:is_mine" data-template-id="{{template.id}}"
+            ng-repeat="template in templates| filter:query | ownership:is_mine" data-template-id="{{template.id}}"
             ng-switch="getUserId() == template.owner">
             <p>{{template.text | truncate:180}}</p>
             <i title="This question is a shared template owned by others." ui-jq="tooltip" data-placement="right" data-delay="500" class="icon-lock template-lock" ng-switch-when="false"></i>
