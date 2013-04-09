@@ -26,9 +26,11 @@
 /* Positioning for the sidebar (questions bank) and the main content area (form)
  * */
 #panel {
-    width: 24em;
+    width: 24.1em;
     position: fixed;
     padding: 0.5em;
+    padding-bottom: 20em;
+    background: lightgoldenrodyellow;
 }
 
 #formcontent {
@@ -47,60 +49,110 @@
 
 #question-template-list {
     margin: 1em 0;
+    margin-left: 0.1em;
+    overflow: auto;
+    height: 14.5em; /* show 2 questions */
 }
 
-.question-template {
-    border-top: #003399 dashed thin;
+/* responsive height for the sidebar, increment in # questions displayed */
+@media all and (min-height: 30em) {
+    #question-template-list {
+        height: 21.5em; /* show 3 questions */
+    }
+}
+
+@media all and (min-height: 36em) {
+    #question-template-list {
+        height: 28.5em; /* show 4 questions */
+    }
+}
+
+@media all and (min-height: 42em) {
+    #question-template-list {
+        height: 35.5em; /* show 5 questions */
+    }
+}
+
+@media all and (min-height: 48.5em) {
+    #question-template-list {
+        height: 42.5em; /* show 6 questions */
+    }
+}
+
+@media all and (min-height: 54.5em) {
+    #question-template-list {
+        height: 49.5em; /* show 7 questions */
+    }
+}
+
+/* this is max for my 1080p screen */
+@media all and (min-height: 60em) {
+    #question-template-list {
+        height: 56em; /* show 8 questions */
+    }
+}
+
+@media all and (min-height: 67em) {
+    #question-template-list {
+        height: 64em; /* show 9 questions */
+    }
+}
+
+li.question-template {
+    border-top: #aaa dashed thin;
     position: relative;
-}
-
-.question-template .edit-link {
-    padding: 0;
-}
-
-.question-template p{
-    overflow: hidden;
-    height: 6em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
 }
 
 .question-template:first-child {
     border-top: none;
 }
 
+
+li.question-template p {
+    padding: 0.3em;
+    color: #333;
+    margin: 0;
+    overflow: hidden;
+    height: 6em;
+}
+
+li.question-template p:hover {
+    border-radius: 8px;
+    background: #fffa69;
+}
+
+ul.question-template-buttons {
+    position: absolute;
+    top: 4px;
+    left: -24px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul.question-template-buttons li {
+    margin-bottom: 0.3em;
+}
+
+ul.question-template-buttons li i {
+    display: inline;
+    padding: 0.5em;
+}
+
+ul.question-template-buttons a:hover {
+    color: red;
+    text-decoration: none;
+    background: transparent !important;
+}
+
 .new-question {
-    border: #003399 dashed thin;
+    border: #003399 solid thin;
     height: 3em;
     text-align: center;
     line-height: 3em;
     margin: 1em 0;
-}
-
-.ui-draggable-dragging {
-    border: #006dcc dashed thin;
-    background: #eee no-repeat;
-}
-
-ul#question-list {
-    list-style: none;
-    margin: 0;
-    min-height: 10em;
-}
-
-ul#question-list li {
-    padding: 1em 0 1em 0;
-}
-
-ul#question-list li:first-child {
-}
-
-.ui-sortable-helper {
-    border: #006dcc dashed thin;
-    background: #eee no-repeat;
-}
-
-#question-template-list {
-    overflow: auto;
-    height: 500px;
 }
 
 #template-filter {
@@ -116,7 +168,35 @@ ul#question-list li:first-child {
     margin: 0 0.5em 0 0;
 }
 
+.ui-draggable-dragging {
+    border: #aaa dashed thin !important;
+    background: #fffa69;
+    border-radius: 8px;
+    width: 21em; /* force width so it doesn't shrink when leaving parent elem */
+}
+
+.ui-draggable-dragging i {
+    display: none !important;
+}
+
+.ui-sortable-helper {
+    border: #aaa dashed thin;
+}
+
 /* Main content area */
+
+ul#question-list {
+    list-style: none;
+    margin: 0;
+    min-height: 10em;
+}
+
+ul#question-list li {
+    padding: 1em 0 1em 0;
+}
+
+ul#question-list li:first-child {
+}
 
 .editable {
     overflow: hidden;
@@ -136,12 +216,6 @@ ul#question-list li:first-child {
 
 .response-radio, .response-checkbox, .response-input, .response-textarea {
     padding-left: 1em;
-}
-
-.template-lock, .template-edit {
-    position: absolute;
-    top: 4px;
-    left: -18px;
 }
 
 .form-selector .form-item {

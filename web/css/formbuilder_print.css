@@ -4,6 +4,10 @@
     display: none;
 }
 
+button {
+    display: none;
+}
+
 .navbar {
     display: none;
 }
@@ -13,6 +17,17 @@ footer {
 }
 
 /* Adjust spacing */
+
+/* undo margin required by static top navbar */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#formcontent {
+    margin: 0;
+    padding: 0;
+}
 
 #form-paper {
     padding: 0;
