@@ -521,6 +521,9 @@ function MenuCtrl($scope, $rootScope) {
     $scope.load = function() {
         $rootScope.$broadcast('loadEvent');
     }
+    $scope.help = function() {
+        $('body').chardinJs('start');
+    }
 }
 
 function FormLoadController($scope, dialog) {

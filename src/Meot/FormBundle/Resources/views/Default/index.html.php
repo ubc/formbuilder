@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
         <![endif]-->
         <link rel="stylesheet" href="css/angular-ui.min.css">
+        <link rel="stylesheet" href="css/chardinjs.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/formbuilder.css">
 		<link rel="stylesheet" href="css/formbuilder_print.css" media="print">
@@ -36,6 +37,7 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-ui-1.10.1.min.js"><\/script>')</script>
 
         <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/vendor/chardinjs.min.js"></script>
 
         <script src="js/main.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
@@ -75,6 +77,7 @@
                             <li><a href ng-click="new()">New</a></li>
                             <li><a href ng-click="save()">Save</a></li>
                             <li><a href ng-click="load()">Load</a></li>
+                            <li><a href ng-click="help()">Help</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -84,16 +87,16 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3" id="panel">
-                    <div class="well sidebar-nav" ng-view>
+                    <div class="well sidebar-nav" ng-view data-intro="Question bank, where you can drag questions to your form." data-position="bottom">
 
                     </div><!--/.well -->
                 </div><!--/span-->
                 <div class="span9" ng-controller="FormCtrl">
-                    <h2 class="editable pull-left" contenteditable="true" ng-model="form.name"></h2>
+                    <h2 class="editable pull-left" contenteditable="true" ng-model="form.name" data-intro="Form name" data-position="right"></h2>
                     <button id="printBtn" class="btn pull-right" onclick="window.print();"><i class="icon-print">Print</i></button>
                     <div class="clearfix"></div>
                     <div class="hero-unit" id="form-paper" droppable drop="addQuestion(id)">
-                        <div class="editable" contenteditable="true" ng-model="form.header"></div>
+                        <div class="editable" contenteditable="true" ng-model="form.header" data-intro="Form header" data-position="bottom"></div>
                         <ul id="question-list" ui-sortable="sortableOptions" ng-model="form.questions" editable-ul>
                             <li resizable='{containment: "parent"}' ng-repeat="question in form.questions" ng-switch="question.response_type" ng-style="question.metadata" ng-model="question">
                                 <div class="handle pull-left"><i class="icon-arrow-up"></i><br/><i class="icon-arrow-down"></i></div>
@@ -112,7 +115,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <div class="editable" contenteditable="true" ng-model="form.footer"></div>
+                        <div class="editable" contenteditable="true" ng-model="form.footer" data-intro="Form footer" data-position="bottom"></div>
                     </div>
                     {{form}}
                 </div><!--/span-->

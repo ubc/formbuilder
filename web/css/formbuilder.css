@@ -137,3 +137,8 @@ ul#question-list li:first-child {
     top: 4px;
     left: -5px;
 }
+
+.chardinjs-show-element
+{
+    color: #cccccc;
+}
