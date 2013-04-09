@@ -1,3 +1,42 @@
+/* Top Navbar */
+.navbar-inner {
+    padding: 0 20px;
+}
+
+.navbar-inner .brand {
+    color: white;
+}
+
+.navbar-inner ul.nav li a {
+    color: white;
+}
+
+.navbar-inner ul.nav li {
+    border-top: 1px solid #333;
+}
+
+.navbar-inner ul.nav li:hover {
+    background: #0088cc;
+}
+
+.navbar-inner .container-fluid {
+    padding-right: 0;
+}
+
+/* Positioning for the sidebar (questions bank) and the main content area (form)
+ * */
+#panel {
+    width: 24em;
+    position: fixed;
+    padding: 0.5em;
+}
+
+#formcontent {
+    margin-left: 25em;
+    padding: 0.5em;
+}
+
+/* Sidebar (questions bank) */
 #search {
     height: 25px;
     width: 100%;
@@ -64,12 +103,6 @@ ul#question-list li:first-child {
     height: 500px;
 }
 
-.hero-unit {
-    max-height: 600px;
-    overflow: auto;
-}
-
-
 #template-filter {
     padding: 1em 0 0 0;
     border-top: rgb(121, 121, 121) 1px dashed;
@@ -82,6 +115,8 @@ ul#question-list li:first-child {
 #template-filter input[type="checkbox"] {
     margin: 0 0.5em 0 0;
 }
+
+/* Main content area */
 
 .editable {
     overflow: hidden;
@@ -141,4 +176,28 @@ ul#question-list li:first-child {
 .chardinjs-show-element
 {
     color: #cccccc;
+}
+
+/* Default size for the response text boxes */
+.responseText {
+    bottom: 17px;
+}
+
+#form-paper {
+    padding: 1em;
+}
+
+#form-paper button {
+    padding: 0.5em;
+    border: none;
+    background: transparent;
+    float: right;
+}
+
+#form-paper button .icon-remove {
+    color: darkred;
+}
+
+#form-paper button:hover .icon-remove {
+    color: red;
 }
