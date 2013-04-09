@@ -79,7 +79,7 @@
         </div>
 
         <!-- Sidebar -->
-        <div id="panel" ng-view data-intro="Question bank, where you can drag questions to your form." data-position="bottom">
+        <div id="panel" ng-view data-intro="Question bank, where you can drag questions to your form." data-position="right">
             <p>question question question question question question</p>
         </div>
         <!-- Main Content -->
