@@ -381,6 +381,10 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
         handle: ".handle"
     }
 
+	$scope.delete = function (idx) {
+		$scope.form.questions.splice(idx, 1);
+	};
+
     $scope.$on('addQuestionEvent', function(event, params) {
         Question.get({id:params.id}, function(question){
             // remove question id
