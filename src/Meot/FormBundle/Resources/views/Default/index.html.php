@@ -67,7 +67,7 @@
                         <li><a title="Save Form" href="#" ng-click="save()"><i class="icon-save icon-large"></i></a></li>
                         <li><a title="Load Form" href="#" ng-click="load()"><i class="icon-folder-open icon-large"></i></a></li>
                         <li><a title="Print Form" href="#" onclick="window.print();"><i class="icon-print icon-large"></i></a></li>
-                        <li><a title="Shwo Help" href="#" ng-click="help()"><i class="icon-question-sign icon-large"></i></a></li>
+                        <li><a title="Show Help" href="#" ng-click="help()"><i class="icon-question-sign icon-large"></i></a></li>
                     </ul>
                     <!-- Right aligned elements -->
                     <ul class="nav pull-right">
