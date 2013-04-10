@@ -255,7 +255,7 @@ formBuilderApp.directive('responseCheckbox', function() {
     }
 })
 
-function QuestionTemplateCtrl($scope, Question) {
+function QuestionTemplateCtrl($rootScope, $scope, Question) {
     // default filter parameters
     $scope.query = {is_master: true};
     // get the list for question bank
@@ -265,6 +265,11 @@ function QuestionTemplateCtrl($scope, Question) {
     $scope.getUserId = function() {
         return userId;
     }
+
+	// add a question template to the form
+	$scope.addToForm = function(templateId) {
+        $rootScope.$broadcast('addQuestionEvent', {id: templateId});
+	}
 }
 
 function QuestionTemplateEditCtrl($scope, $location, $routeParams, Question) {

@@ -6,18 +6,18 @@
     <ul class="nav nav-list">
         <li class="question-template" draggable='{helper: "clone", revert: "invalid"}'
             ng-repeat="template in templates| filter:query | ownership:is_mine" data-template-id="{{template.id}}">
-			<!-- question template button bar -->
+			<!-- question template buttons bar -->
 			<ul class="question-template-buttons">
-				<!-- edit or lock icon for questions -->
+				<!-- edit button or lock icon for questions -->
 				<li ng-switch="getUserId() == template.owner">
 					<a ng-switch-when="true" ng-href="#/editTemplate/{{template.id}}" title="You are the owner of this question template and can change it.">
 						<i class="icon-pencil"></i>
 					</a>
 					<i ng-switch-when="false" title="This question is a shared template owned by others." ui-jq="tooltip" class="icon-lock"></i> 
 				</li>
-				<!-- add question to form --> 
+				<!-- add question to form button --> 
 				<li>
-					<a title="Add question to form." href="#">
+					<a title="Add question to form." href ng-click="addToForm(template.id)">
 						<i class="icon-share-alt"></i>
 					</a>
 				</li>
