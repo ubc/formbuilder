@@ -394,6 +394,15 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
         Question.get({id:params.id}, function(question){
             // remove question id
             question.id = undefined;
+			// note that to store as a boolean false in the database,
+			// symfony data binding treats the existence of the field
+			// itself as true, so we must give it no value in order to get
+			// it treated as a boolean false.
+			if (!question.is_public) { // need to preserve value of is_public
+				question.is_public = undefined;
+			}
+			// a question placed on a form is always a non-master question
+			question.is_master = undefined;
             // remove response ids
             for(var j=0; j < question.responses.length; j++) {
                 question.responses[j].id = undefined;
