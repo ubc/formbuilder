@@ -35,7 +35,7 @@
 
 #formcontent {
     margin-left: 25em;
-    padding: 0.5em;
+    padding: 0;
 }
 
 /* Sidebar (questions bank) */
@@ -249,12 +249,19 @@ ul#question-list li:first-child {
 
 .chardinjs-show-element
 {
-    color: #cccccc;
+    color: #ddd;
 }
 
 /* Default size for the response text boxes */
 .responseText {
     bottom: 17px;
+    width: 100%;
+}
+
+h2.form-name {
+    background: #f2f2f2;
+    margin: 0;
+    padding: 0.5em;
 }
 
 #form-paper {
@@ -262,10 +269,12 @@ ul#question-list li:first-child {
 }
 
 #form-paper button {
+    position: absolute;
     padding: 0.5em;
     border: none;
     background: transparent;
-    float: right;
+    right: 0.5em;
+    top: -0.5em;
 }
 
 #form-paper button .icon-remove {
@@ -274,4 +283,9 @@ ul#question-list li:first-child {
 
 #form-paper button:hover .icon-remove {
     color: red;
+}
+
+/* Footer */
+footer {
+    padding: 1em;
 }

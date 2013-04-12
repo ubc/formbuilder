@@ -8,11 +8,22 @@ button {
     display: none;
 }
 
+h2.form-name {
+    display: none;
+    padding: 0;
+    margin: 0;
+}
+
 .navbar {
     display: none;
 }
 
 footer {
+    display: none;
+}
+
+/* symfony debug toolbar */
+.sf-toolbar img {
     display: none;
 }
 
@@ -31,9 +42,18 @@ body {
 
 #form-paper {
     padding: 0;
-    margin: 0;
-    overflow: hidden;
+    margin: 5%;
 }
 
-/* Precaution to not waste ink printing background color, etc, should be
- * taken care of by the html5 boilerplate according to their docs */
+/* hide header and footer on some browsers */
+@page 
+{
+    size: auto;   /* auto is the initial value */
+    margin: 0mm;  /* this affects the margin in the printer settings */
+}
+
+body 
+{
+    background-color:#FFFFFF; 
+    margin: 0px;  /* this affects the margin on the content before sending to printer */
+}
