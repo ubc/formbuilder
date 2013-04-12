@@ -87,7 +87,7 @@
             otherwise hallo.js overrides the width and height of the header -->
             <h2 class="editable form-name" contenteditable="true" ng-model="form.name" data-intro="Form name" data-position="right">Loading...</h2>
             <div id="form-paper" droppable drop="addQuestion(id)">
-                <div class="editable" contenteditable="true" ng-model="form.header"  data-intro="Form header" data-position="bottom"></div>
+                <div class="editable form-header" contenteditable="true" ng-model="form.header"  data-intro="Form header" data-position="bottom">Loading...</div>
                 <ul id="question-list" ui-sortable="sortableOptions" ng-model="form.questions" editable-ul>
                     <li resizable='{containment: "parent"}' ng-repeat="question in form.questions" ng-switch="question.response_type" ng-style="question.metadata" ng-model="question">
                         <div class="controls">
@@ -109,7 +109,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="editable" contenteditable="true" ng-model="form.footer"  data-intro="Form footer" data-position="bottom"></div>
+                <div class="editable form-footer" contenteditable="true" ng-model="form.footer"  data-intro="Form footer" data-position="bottom">Loading...</div>
             </div>
             <footer>
             <hr>

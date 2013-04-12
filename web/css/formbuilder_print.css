@@ -63,6 +63,6 @@ body
     margin: 0px;  /* this affects the margin on the content before sending to printer */
 }
 
-textarea {
-    max-width: 811pt;
+textarea, input, div.form-header, div.form-footer {
+    max-width: 800pt;
 }
