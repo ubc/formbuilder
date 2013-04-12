@@ -223,7 +223,7 @@ formBuilderApp.directive('editable', function() {
 })
 
 // this directive enables the rotations on the checkbox and radio responses
-formBuilderApp.directive('responseCheckbox', function() {
+formBuilderApp.directive('rotatableResponse', function() {
     return {
         restrict: 'C',
         link: function(scope, element, attrs) {

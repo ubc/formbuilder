@@ -83,7 +83,7 @@
         </div>
         <!-- Main Content -->
         <div id="formcontent" ng-controller="FormCtrl">
-            <!-- The form's name, "Loading..." is there as a placeholder 
+            <!-- The form's name, "Loading..." is there as a placeholder
             otherwise hallo.js overrides the width and height of the header -->
             <h2 class="editable form-name" contenteditable="true" ng-model="form.name" data-intro="Form name" data-position="right">Loading...</h2>
             <div id="form-paper" droppable drop="addQuestion(id)">
@@ -95,12 +95,12 @@
                         <div class="editable" contenteditable="true" ng-model="question.text">Loading...</div>
                         <div ng-switch-when="1" class="response-input"><input type="text"/></div>
                         <div ng-switch-when="2" class="response-textarea"><textarea storable ng-style="question.response_metadata"></textarea></div>
-                        <div ng-switch-when="3" class="response-radio">
+                        <div ng-switch-when="3" class="response-radio rotatable-response">
                             <label class="radio" ng-class="response.classes" ng-repeat="response in question.responses">
                                 <input type="radio" disabled><span class="editable" contenteditable="true" ng-model="response.text"></span>
                             </label>
                         </div>
-                        <div ng-switch-when="4" class="response-checkbox">
+                        <div ng-switch-when="4" class="response-checkbox rotatable-response">
                             <label class="checkbox" ng-class="response.classes" ng-repeat="response in question.responses">
                                 <input type="checkbox" disabled><span class="editable" contenteditable="true" ng-model="response.text"></span>
                             </label>
