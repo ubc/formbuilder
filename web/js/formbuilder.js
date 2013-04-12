@@ -227,7 +227,7 @@ formBuilderApp.directive('responseCheckbox', function() {
     return {
         restrict: 'C',
         link: function(scope, element, attrs) {
-            var aElement = angular.element('<i class="icon-refresh rotation-handle" ></i>');
+            var aElement = angular.element('<i class="icon-exchange rotation-handle" ></i>');
             element.append(aElement);
             aElement.hide();
             aElement.bind('click', function() {

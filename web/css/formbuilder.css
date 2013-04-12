@@ -192,7 +192,7 @@ ul#question-list {
 }
 
 ul#question-list li {
-    padding: 1em 0 1em 0;
+    padding: 1em 0 0.5em 0;
 }
 
 ul#question-list li:first-child {
@@ -200,10 +200,13 @@ ul#question-list li:first-child {
 
 .editable {
     overflow: hidden;
+    padding-left: 0.6em;
+    padding-right: 0.5em;
 }
 
 .editing, .ui-resizable-resizing {
-    outline: #003399 dashed thin;
+    background: honeydew;
+    border-radius: 8px;
 }
 
 .item-over {
@@ -231,10 +234,11 @@ ul#question-list li:first-child {
 
 .handle {
     position: absolute;
-    top: 4px;
-    left: -20px;
+    left: 0px;
+    top: 0px;
     height: 100%;
     display: none;
+    color: green;
 }
 
 .response-checkbox, .response-radio {
@@ -243,8 +247,15 @@ ul#question-list li:first-child {
 
 .rotation-handle {
     position: absolute;
-    top: 4px;
-    left: -5px;
+    top: -0.2em;
+    left: 0px;
+    padding; 0.5em;
+    color: #08c;
+}
+
+.rotation-handle:hover {
+    text-decoration: none;
+    color: red;
 }
 
 .chardinjs-show-element
@@ -252,10 +263,38 @@ ul#question-list li:first-child {
     color: #ddd;
 }
 
-/* Default size for the response text boxes */
-.responseText {
-    bottom: 17px;
-    width: 100%;
+/* default size for the response text boxes */
+
+#form-paper div.response-input, #form-paper div.response-textarea {
+    padding-left: 0;
+}
+
+#form-paper div.response-input, 
+#form-paper div.response-textarea,
+#form-paper div.response-radio,
+#form-paper div.response-checkbox
+{
+    padding-top: 0.5em;
+}
+
+#form-paper div.response-input input[type="text"], 
+#form-paper div.response-textarea textarea 
+{
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0;
+    border: 1px solid #aaa;
+    display: block;
+}
+
+#form-paper div.response-input input[type="text"]
+{
+    height: 4em;
+}
+
+#form-paper div.response-textarea textarea {
+    height: 12em;
 }
 
 h2.form-name {
@@ -268,6 +307,7 @@ h2.form-name {
     padding: 1em;
 }
 
+/* remove question button */
 #form-paper button {
     position: absolute;
     padding: 0.5em;
