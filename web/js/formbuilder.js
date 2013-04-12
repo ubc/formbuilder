@@ -135,12 +135,12 @@ formBuilderApp.directive("resizable", function() {
             element.bind("mouseenter", function() {
                 //element.switchClass('editable', 'editing', 200);
                 element.addClass('editing');
-                element.children("div.handle").show();
+                element.children("div.controls").show();
             })
             element.bind("mouseleave", function() {
                 //element.switchClass('editing', 'editable', 200);
                 element.removeClass('editing');
-                element.children("div.handle").hide();
+                element.children("div.controls").hide();
             })
         }
     }
@@ -228,8 +228,7 @@ formBuilderApp.directive('rotatableResponse', function() {
         restrict: 'C',
         link: function(scope, element, attrs) {
             var aElement = angular.element('<i class="icon-exchange rotation-handle" ></i>');
-            element.append(aElement);
-            aElement.hide();
+            element.parent().children("div.controls").append(aElement);
             aElement.bind('click', function() {
                 _.each(scope.question.responses, function(value) {
                     if (_.isString(value.classes)) {
@@ -244,12 +243,6 @@ formBuilderApp.directive('rotatableResponse', function() {
                     }
                 })
                 scope.$apply();
-            })
-            element.bind("mouseenter", function() {
-                aElement.show();
-            })
-            element.bind("mouseleave", function() {
-                aElement.hide();
             })
         }
     }

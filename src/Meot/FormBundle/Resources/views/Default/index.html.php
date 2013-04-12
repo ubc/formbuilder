@@ -90,8 +90,10 @@
                 <div class="editable" contenteditable="true" ng-model="form.header"  data-intro="Form header" data-position="bottom"></div>
                 <ul id="question-list" ui-sortable="sortableOptions" ng-model="form.questions" editable-ul>
                     <li resizable='{containment: "parent"}' ng-repeat="question in form.questions" ng-switch="question.response_type" ng-style="question.metadata" ng-model="question">
-                        <button ng-click="delete($index)"><i class="icon-remove"></i></button>
-                        <div class="handle pull-left"><i class="icon-move"></i></div>
+                        <div class="controls">
+                            <div class="handle pull-left"><i class="icon-move"></i></div>
+                            <button ng-click="delete($index)"><i class="icon-remove"></i></button>
+                        </div>
                         <div class="editable" contenteditable="true" ng-model="question.text">Loading...</div>
                         <div ng-switch-when="1" class="response-input"><input type="text"/></div>
                         <div ng-switch-when="2" class="response-textarea"><textarea storable ng-style="question.response_metadata"></textarea></div>

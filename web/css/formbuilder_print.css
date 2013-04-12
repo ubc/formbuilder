@@ -8,6 +8,10 @@ button {
     display: none;
 }
 
+.controls {
+    display: none;
+}
+
 h2.form-name {
     display: none;
     padding: 0;
@@ -43,6 +47,7 @@ body {
 #form-paper {
     padding: 0;
     margin: 5%;
+    width: auto;
 }
 
 /* hide header and footer on some browsers */
@@ -56,4 +61,8 @@ body
 {
     background-color:#FFFFFF; 
     margin: 0px;  /* this affects the margin on the content before sending to printer */
+}
+
+textarea {
+    max-width: 811pt;
 }
