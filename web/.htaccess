@@ -7,4 +7,9 @@
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ app.php [QSA,L]
+
+    AuthType shibboleth
+    ShibRequireSession Off
+    ShibUseHeaders On
+    require shibboleth
 </IfModule>

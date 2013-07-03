@@ -26,6 +26,13 @@ security:
         secured_area:
             anonymous: ~
 
+        secured_area:
+            pattern:    ^/secured
+            shibboleth: ~
+            logout:
+                path: /secured/logout
+                target: /
+                success_handler: security.logout.handler.shibboleth
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #
