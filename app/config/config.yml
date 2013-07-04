@@ -74,4 +74,5 @@ sensio_framework_extra:
     view:    { annotations: false }
     router:  { annotations: true }
 
-shibboleth: ~
+shibboleth: 
+    username_attribute: eduPersonPrincipalName

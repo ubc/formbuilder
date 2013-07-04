@@ -1,9 +1,9 @@
 var formBuilderApp = angular.module("FormBuilder", ['questionServices', 'formServices', 'ui', 'ui.bootstrap']).
     config(function($routeProvider){
         $routeProvider.
-            when('/', {controller:QuestionTemplateCtrl, templateUrl:'partials/template-list.html'}).
-            when('/newTemplate', {controller:QuestionTemplateNewCtrl, templateUrl:'partials/edit-template.html'}).
-            when('/editTemplate/:templateId', {controller:QuestionTemplateEditCtrl, templateUrl:'partials/edit-template.html'}).
+            when('/', {controller:QuestionTemplateCtrl, templateUrl:'/partials/template-list.html'}).
+            when('/newTemplate', {controller:QuestionTemplateNewCtrl, templateUrl:'/partials/edit-template.html'}).
+            when('/editTemplate/:templateId', {controller:QuestionTemplateEditCtrl, templateUrl:'/partials/edit-template.html'}).
             otherwise({redirectTo:'/'});
     });
 

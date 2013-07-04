@@ -15,37 +15,37 @@
                 padding-top: 42px;
             }
         </style>
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
         <!--[if IE 7]>
         <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
         <![endif]-->
-        <link rel="stylesheet" href="css/angular-ui.min.css">
-        <link rel="stylesheet" href="css/chardinjs.css">
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/formbuilder.css">
-		<link rel="stylesheet" href="css/formbuilder_print.css" media="print">
+        <link rel="stylesheet" href="{{ asset('css/angular-ui.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/chardinjs.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/formbuilder.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/formbuilder_print.css') }}" media="print">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="{{ asset('js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}"></script>
 
         <!-- Non-minified versions during development -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.js"></script>
 
-        <script src="js/vendor/bootstrap.js"></script>
-        <script src="js/vendor/chardinjs.min.js"></script>
+        <script src="{{ asset('js/vendor/bootstrap.js') }}"></script>
+        <script src="{{ asset('js/vendor/chardinjs.min.js') }}"></script>
 
-        <script src="js/main.js"></script>
+        <script src="{{ asset('js/main.js') }}"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-resource.js"></script>
-        <script src="js/vendor/angular-ui.min.js"></script>
-        <script src="js/vendor/ui-bootstrap-tpls-0.2.0.min.js"></script>
-        <script src="js/vendor/underscore-min.js"></script>
-        <script src="js/services.js"></script>
-        <script src="js/formbuilder.js" type="text/javascript"></script>
-        <script src="js/vendor/rangy-core.js"></script>
-        <script src="js/vendor/hallo.js"></script>
+        <script src="{{ asset('js/vendor/angular-ui.min.js') }}"></script>
+        <script src="{{ asset('js/vendor/ui-bootstrap-tpls-0.2.0.min.js') }}"></script>
+        <script src="{{ asset('js/vendor/underscore-min.js') }}"></script>
+        <script src="{{ asset('js/services.js') }}"></script>
+        <script src="{{ asset('js/formbuilder.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('js/vendor/rangy-core.js') }}"></script>
+        <script src="{{ asset('js/vendor/hallo.js') }}"></script>
         <script>
             var userId = 1;
         </script>
@@ -71,8 +71,13 @@
                     </ul>
                     <!-- Right aligned elements -->
                     <ul class="nav pull-right">
-                        <li><a href="#"><i class="icon-user"></i>Username</a></li>
-                        <li><a title="Logout" href="#"><i class="icon-signout icon-large"></i></a></li>
+ 			{% if app.user %}
+                        <li><a href="#"><i class="icon-user"></i>{{ app.user.username }}</a></li>
+                        <li><a title="Logout" href="{{ path('logout') }}"><i class="icon-signout icon-large"></i></a></li>
+  			{% else %}
+                        <li><a href="#"><i class="icon-user"></i>Guest</a></li>
+                        <li><a title="Login" href="/Shibboleth.sso/Login"><i class="icon-signout icon-large"></i></a></li>
+			{% endif %}
                     </ul>
                 </div>
             </div>

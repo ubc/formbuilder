@@ -14,7 +14,7 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/")
-     * @Template(engine="php")
+     * @Template(engine="twig")
      */
     public function indexAction()
     {

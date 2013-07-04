@@ -11,26 +11,25 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-            in_memory:
-                memory:
-                    users:
-                        user:  { password: userpass, roles: 'ROLE_USER' }
-                        admin: { password: adminpass, roles: 'ROLE_ADMIN' }
-
+        in_memory:
+           memory:
+               users:
+                   user:  { password: userpass, roles: 'ROLE_USER' }
+                   admin: { password: adminpass, roles: 'role_admin' }
+                   "compass@ubc.ca": { password: adminpass, roles: 'role_admin' }
+  
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            security: false
-        secured_area:
-            anonymous: ~
+#        login:
+#            security: false
 
         secured_area:
-            pattern:    ^/secured
+            pattern:    ^/
             shibboleth: ~
             logout:
-                path: /secured/logout
+                path: /logout
                 target: /
                 success_handler: security.logout.handler.shibboleth
     access_control:
