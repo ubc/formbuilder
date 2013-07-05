@@ -1,6 +1,9 @@
 <?php
 namespace Meot\FormBundle\Entity;
 
+use KULeuven\ShibbolethBundle\Security\ShibbolethUserProviderInterface;
+use KULeuven\ShibbolethBundle\Security\ShibbolethUserToken;
+
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -8,7 +11,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
-class UserRepository extends EntityRepository implements UserProviderInterface
+class UserRepository extends EntityRepository implements ShibbolethUserProviderInterface
 {
     public function loadUserByUsername($username)
     {
@@ -35,9 +38,30 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         return $user;
     }
 
+    public function createUser(ShibbolethUserToken $token) {
+        // Create user object using shibboleth attributes stored in the token.
+        $user = new User();
+        $user->setUsername($token->getUsername());
+        $user->setPassword('randompassword');
+        #$user->setSurname($token->getSurname());
+        #$user->setGivenName($token->getGivenName());
+        #$user->setEmail($token->getMail());
+        // If you like, you can also add default roles to the user based on shibboleth attributes. E.g.:
+        //if ($token->isStudent()) $user->addRole('ROLE_STUDENT');
+        //elseif ($token->isStaff()) $user->addRole('ROLE_STAFF');
+        //else $user->addRole('ROLE_GUEST');
+
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+
+        return $user;
+    }
+
     public function refreshUser(UserInterface $user)
     {
-        $class = get_class($user);
+        return $this->loadUserByUsername($user->getUsername());
+/*        $class = get_class($user);
+        var_dump($class);exit;
         if (!$this->supportsClass($class)) {
             throw new UnsupportedUserException(
                 sprintf(
@@ -47,12 +71,13 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             );
         }
 
-        return $this->find($user->getId());
+        return $this->find($user->getId());*/
     }
 
     public function supportsClass($class)
     {
-        return $this->getEntityName() === $class
-            || is_subclass_of($class, $this->getEntityName());
+        return $class === 'Meot\FormBundle\Entity\User';
+//        return $this->getEntityName() === $class
+//            || is_subclass_of($class, $this->getEntityName());
     }
 }

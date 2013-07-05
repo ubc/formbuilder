@@ -3,21 +3,22 @@ jms_security_extra:
     expressions: true
 
 security:
-    encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+#    encoders:
+#        Symfony\Component\Security\Core\User\User: plaintext
 
-    role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+#    role_hierarchy:
+#        ROLE_ADMIN:       ROLE_USER
+#        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        in_memory:
-           memory:
-               users:
-                   user:  { password: userpass, roles: 'ROLE_USER' }
-                   admin: { password: adminpass, roles: 'role_admin' }
-                   "compass@ubc.ca": { password: adminpass, roles: 'role_admin' }
-  
+        main_provider:
+           id: shib_user_provider
+#           memory:
+#               users:
+#                   user:  { password: userpass, roles: 'ROLE_USER' }
+#                   admin: { password: adminpass, roles: 'role_admin' }
+#                   "compass@ubc.ca": { password: adminpass, roles: 'role_admin' }
+
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -28,6 +29,8 @@ security:
         secured_area:
             pattern:    ^/
             shibboleth: ~
+#            http_basic:
+#                realm: "Secured FormBuilder Area"
             logout:
                 path: /logout
                 target: /
