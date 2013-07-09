@@ -27,16 +27,18 @@ security:
 #            security: false
 
         secured_area:
-            pattern:    ^/
+            pattern:    ^/builder
             shibboleth: ~
 #            http_basic:
 #                realm: "Secured FormBuilder Area"
             logout:
-                path: /logout
+                path: /builder/logout
+                # target doesn't work for now
                 target: /
                 success_handler: security.logout.handler.shibboleth
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/builder, roles: ROLE_USER, requires_channel: https }
         #
         # You must uncomment the two following rules to restrict access to paths
         # starting with the /_internal prefix to only localhost

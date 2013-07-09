@@ -20,4 +20,13 @@ class DefaultController extends Controller
     {
         return array();
     }
+
+    /**
+     * @Route("/builder")
+     * @Template(engine="twig")
+     */
+    public function builderAction()
+    {
+        return array();
+    }
 }
