@@ -1,6 +1,6 @@
-index:
-    path: /
-    defaults: { _controller: MeotFormBundle:Default:index }
+web:
+    resource: "@MeotFormBundle/Controller"
+    type:     annotation
 
 questions:
     type:     rest

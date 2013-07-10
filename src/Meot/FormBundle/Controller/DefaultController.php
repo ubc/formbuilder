@@ -14,9 +14,18 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/")
-     * @Template(engine="php")
+     * @Template(engine="twig")
      */
     public function indexAction()
+    {
+        return array();
+    }
+
+    /**
+     * @Route("/builder")
+     * @Template(engine="twig")
+     */
+    public function builderAction()
     {
         return array();
     }

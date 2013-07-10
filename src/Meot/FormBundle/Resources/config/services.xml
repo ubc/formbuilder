@@ -4,17 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="meot_form.example.class">Meot\FormBundle\Example</parameter>
+        <parameter key="shib_user_provider.class">Meot\FormBundle\Entity\UserRepository</parameter>
+        <parameter key="meot_user_entity">Meot\FormBundle\Entity\User</parameter>
     </parameters>
-
     <services>
-        <service id="meot_form.example" class="%meot_form.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="shib_user_provider" class="%shib_user_provider.class%"
+            factory-service="doctrine" factory-method="getRepository">
+            <argument>%meot_user_entity%</argument>
         </service>
     </services>
-    -->
 </container>
