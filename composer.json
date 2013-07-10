@@ -30,7 +30,7 @@
     "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:rmoreas/ShibbolethBundle.git"
+      "url": "git@github.com:ubc/ShibbolethBundle.git"
     }
     ],
     "scripts": {
