@@ -25,8 +25,16 @@
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit">
                 <h1>Form Builder</h1>
-                <p>A free style form building tool with question bank.</p>
-                <p><a href="{{ path('meot_form_default_builder') }}"><img src="https://www.auth.cwl.ubc.ca/CWL_login_button.gif" width="76" height="25" alt="CWL Login" border="0" valign="middle"></a></p>
+                <p class="lead">A free style form building tool with question bank.</p>
+                <p>
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="flash-notice">
+                        {{ flashMessage }}
+                    </div>
+                    {% endfor %}
+                    To log in, please click on the CWL Login button below. <br />
+                    <a href="{{ path('meot_form_default_builder') }}"><img src="https://www.auth.cwl.ubc.ca/CWL_login_button.gif" width="76" height="25" alt="CWL Login" border="0" valign="middle"></a>
+                </p>
             </div>
 
             <!-- Example row of columns -->

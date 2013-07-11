@@ -103,6 +103,6 @@
         <script src="{{ asset('js/vendor/rangy-core.js') }}"></script>
         <script src="{{ asset('js/vendor/hallo.js') }}"></script>
         <script>
-            var userId = 1;
+            var userId = {{ app.user.id }};
         </script>
 {% endblock %}
