@@ -533,7 +533,9 @@ function MenuCtrl($scope, $rootScope) {
         $rootScope.$broadcast('loadEvent');
     }
     $scope.help = function() {
-        $('body').chardinJs('start');
+        $('#introDlg').modal().on('hidden', function () {
+            introJs().setOption("showStepNumbers", false).start();
+        });
     }
 }
 
