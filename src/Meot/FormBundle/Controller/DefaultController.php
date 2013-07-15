@@ -9,6 +9,7 @@ use Meot\FormBundle\Entity\Question,
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 class DefaultController extends Controller
 {
@@ -27,6 +28,9 @@ class DefaultController extends Controller
      */
     public function builderAction()
     {
+        // force browser not to cache the builder page so that when user logout
+        // and click back button, he/she will not see the previous page
+        header("Cache-Control: no-store, no-cache, must-revalidate");
         return array();
     }
 }
