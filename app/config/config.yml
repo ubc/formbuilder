@@ -76,3 +76,4 @@ sensio_framework_extra:
 
 shibboleth: 
     username_attribute: eduPersonPrincipalName
+    logout_message: You have been successfully logged out!

@@ -25,7 +25,7 @@
         "jms/serializer-bundle": "0.12.*@dev",
         "jms/serializer": "0.12.*@dev",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "kuleuven/shibboleth-bundle": "dev-master"
+        "kuleuven/shibboleth-bundle": "dev-ubc"
     },
     "repositories": [
     {
