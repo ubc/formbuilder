@@ -147,7 +147,6 @@ class FormController extends FosRestController implements ClassResourceInterface
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
             $em->flush();
 
             return $this->view(null, Codes::HTTP_NO_CONTENT);

@@ -24,3 +24,16 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+#
+security:
+    encoders:
+        Meot\FormBundle\Entity\User: plaintext
+    firewalls:
+        main:
+            pattern:    ^/builder
+            http_basic:
+                realm: Form Builder Dev/Test Login
+                provider: db
+            logout:
+                path: /builder/logout
+                target: /
