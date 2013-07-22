@@ -37,7 +37,7 @@ class LoadQuestionData extends AbstractFixture implements OrderedFixtureInterfac
         $q3->setResponseType(3);
         $q3->setIsPublic(1);
         $q3->setIsMaster(0);
-        $q3->setOwner(1);
+        $q3->setOwner(2);
 
         $manager->persist($q3);
 

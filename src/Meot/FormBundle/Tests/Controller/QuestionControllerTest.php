@@ -5,6 +5,7 @@ namespace Meot\FormBundle\Tests\Controller;
 use Meot\FormBundle\Tests\FunctionalTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use FOS\Rest\Util\Codes;
 
 class QuestionControllerTest extends FunctionalTestCase
 {
@@ -20,7 +21,7 @@ class QuestionControllerTest extends FunctionalTestCase
         $crawler = $client->request('GET', '/api/questions.json');
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 200);
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
 
         $result = json_decode($response->getContent());
         $this->assertEquals(3, count($result));
@@ -42,7 +43,7 @@ class QuestionControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 201);
+        $this->assertJsonResponse($response, Codes::HTTP_CREATED);
         // check location
         $this->assertTrue(
             $response->headers->contains('Location', 'http://localhost/api/questions/4'),
@@ -62,7 +63,7 @@ class QuestionControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 500);
+        $this->assertJsonResponse($response, Codes::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function testGetObject()
@@ -72,7 +73,7 @@ class QuestionControllerTest extends FunctionalTestCase
         $crawler = $client->request('GET', '/api/questions/1.json');
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 200);
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
 
         $question = json_decode($response->getContent());
 
@@ -84,7 +85,7 @@ class QuestionControllerTest extends FunctionalTestCase
         $crawler = $client->request('GET', '/api/questions/999.json');
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 404);
+        $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
     }
 
     public function testPut()
@@ -99,7 +100,7 @@ class QuestionControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 204);
+        $this->assertJsonResponse($response, Codes::HTTP_NO_CONTENT);
 
         // verify against database
         $result = $this->entityManager->find('MeotFormBundle:Question', 2);
@@ -120,6 +121,19 @@ class QuestionControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 404);
+        $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
+
+        // update other's question
+        $client = static::getClient('user');
+        $crawler = $client->request(
+            'PUT', '/api/questions/3.json', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"form":{"text":"Question 3", "response_type":1, "is_public":1, "owner":1}}'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, Codes::HTTP_FORBIDDEN);
+
     }
 }

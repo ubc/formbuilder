@@ -3,6 +3,7 @@
 namespace Meot\FormBundle\Tests\Controller;
 
 use Meot\FormBundle\Tests\FunctionalTestCase;
+use FOS\Rest\Util\Codes;
 
 class FormControllerTest extends FunctionalTestCase
 {
@@ -18,7 +19,7 @@ class FormControllerTest extends FunctionalTestCase
         $crawler = $client->request('GET', '/api/forms.json');
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 200);
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
 
         $result = json_decode($response->getContent());
         $this->assertEquals(3, count($result));
@@ -39,7 +40,7 @@ class FormControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 201);
+        $this->assertJsonResponse($response, Codes::HTTP_CREATED);
         // check location
         $this->assertTrue(
             $response->headers->contains('Location', 'http://localhost/api/forms/4'),
@@ -59,7 +60,7 @@ class FormControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 500);
+        $this->assertJsonResponse($response, Codes::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function testGetObject()
@@ -69,7 +70,7 @@ class FormControllerTest extends FunctionalTestCase
         $crawler = $client->request('GET', '/api/forms/1.json');
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 200);
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
 
         $form = json_decode($response->getContent());
 
@@ -81,7 +82,7 @@ class FormControllerTest extends FunctionalTestCase
         $crawler = $client->request('GET', '/api/forms/999.json');
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 404);
+        $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
     }
 
     public function testPut()
@@ -96,7 +97,7 @@ class FormControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 204);
+        $this->assertJsonResponse($response, Codes::HTTP_NO_CONTENT);
 
         // verify against database
         $result = $this->entityManager->find('MeotFormBundle:Form', 2);
@@ -117,7 +118,7 @@ class FormControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 404);
+        $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
     }
 
     public function testDelete()
@@ -130,7 +131,7 @@ class FormControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 204);
+        $this->assertJsonResponse($response, Codes::HTTP_NO_CONTENT);
 
         $result = $this->entityManager->find('MeotFormBundle:Form', 3);
         $this->assertEquals(null, $result);
@@ -142,7 +143,7 @@ class FormControllerTest extends FunctionalTestCase
 
         $response = $client->getResponse();
 
-        $this->assertJsonResponse($response, 404);
+        $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
     }
 
 /*    public function testQuestionGet()
