@@ -1,6 +1,6 @@
 angular.module('questionServices', ['ngResource']).
     factory('Question', function($resource) {
-        return $resource('questions/:id/:action', {id:"@id"}, {
+        return $resource('api/questions/:id/:action', {id:"@id"}, {
             update: { method: 'PUT' },
             copy: {method: "POST", params: {action: "copy"}}
         });
@@ -8,7 +8,7 @@ angular.module('questionServices', ['ngResource']).
 
 angular.module('formServices', ['ngResource']).
     factory('Form', function($resource) {
-        var Form = $resource('forms/:id', {id:"@id"}, {
+        var Form = $resource('api/forms/:id', {id:"@id"}, {
             update: { method: 'PUT' }
         });
 
