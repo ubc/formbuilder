@@ -112,7 +112,7 @@ class QuestionController extends FosRestController implements ClassResourceInter
         $form->bind($request);
 
         if ($form->isValid()) {
-            $entity->setOwner(1);
+            $entity->setOwner($this->getUser()->getId());
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -154,15 +154,25 @@ class QuestionController extends FosRestController implements ClassResourceInter
      *  input="Meot\FormBundle\Form\QuestionType",
      *  statusCodes={
      *      204="Returned when successful",
+     *      403="Access denied when the owner is not current logged user",
      *      404="Returned when no question found"}
      * )
      */
     public function putAction(Request $request, Question $entity)
     {
+        $owner = $entity->getOwner();
+
+        // check the owner
+        if ($this->getUser()->getId() != $owner) {
+            return $this->view(null, Codes::HTTP_FORBIDDEN);
+        }
+
         $form = $this->getForm($entity);
         $form->bind($request);
 
         if ($form->isValid()) {
+
+            $entity->setOwner($owner);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();

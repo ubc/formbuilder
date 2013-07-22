@@ -13,9 +13,9 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testGet()
     {
-        $client = static::createClient();
+        $client = $this->getClient('user');
 
-        $crawler = $client->request('GET', '/forms.json');
+        $crawler = $client->request('GET', '/api/forms.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 200);
@@ -29,9 +29,10 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testPost()
     {
-        $client = static::createClient();
+        $client = $this->getClient('user');
+
         $crawler = $client->request(
-            'POST', '/forms.json', array(), array(),
+            'POST', '/api/forms.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
             '{"form":{"name":"Form 4", "header":"header 4", "footer":"footer 4", "is_public":1, "owner":2}}'
         );
@@ -41,7 +42,7 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertJsonResponse($response, 201);
         // check location
         $this->assertTrue(
-            $response->headers->contains('Location', 'http://localhost/forms/4'),
+            $response->headers->contains('Location', 'http://localhost/api/forms/4'),
             $response->headers
         );
 
@@ -51,7 +52,7 @@ class FormControllerTest extends FunctionalTestCase
 
         // test missing field
         $crawler = $client->request(
-            'POST', '/forms.json', array(), array(),
+            'POST', '/api/forms.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
             '{"form":{"header":"header 4", "footer":"footer 4", "is_public":0, "owner":2}}'
         );
@@ -63,9 +64,9 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testGetObject()
     {
-        $client = static::createClient();
+        $client = $this->getClient('user');
 
-        $crawler = $client->request('GET', '/forms/1.json');
+        $crawler = $client->request('GET', '/api/forms/1.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 200);
@@ -77,7 +78,7 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertEquals($expected->getName(), $form->name);
 
         // get non existing object
-        $crawler = $client->request('GET', '/forms/999.json');
+        $crawler = $client->request('GET', '/api/forms/999.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 404);
@@ -85,9 +86,10 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testPut()
     {
-        $client = static::createClient();
+        $client = $this->getClient('user');
+
         $crawler = $client->request(
-            'PUT', '/forms/2.json', array(), array(),
+            'PUT', '/api/forms/2.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
             '{"form":{"name":"Form 2 updated", "header":"header 2 updated", "footer":"footer 2 updated", "owner":2}}'
         );
@@ -106,9 +108,9 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertFalse($result->getIsPublic());
 
         // update a non-existing object
-        $client = static::createClient();
+        $client = $this->getClient('user');
         $crawler = $client->request(
-            'PUT', '/forms/999.json', array(), array(),
+            'PUT', '/api/forms/999.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
             '{"form":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
         );
@@ -120,9 +122,10 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testDelete()
     {
-        $client = static::createClient();
+        $client = $this->getClient('user');
+
         $crawler = $client->request(
-            'DELETE', '/forms/3.json'
+            'DELETE', '/api/forms/3.json'
         );
 
         $response = $client->getResponse();
@@ -134,7 +137,7 @@ class FormControllerTest extends FunctionalTestCase
 
         // delete non-existing object
         $crawler = $client->request(
-            'DELETE', '/forms/999.json'
+            'DELETE', '/api/forms/999.json'
         );
 
         $response = $client->getResponse();
@@ -144,9 +147,9 @@ class FormControllerTest extends FunctionalTestCase
 
 /*    public function testQuestionGet()
     {
-        $client = static::createClient();
+        $client = static::getClient();
 
-        $crawler = $client->request('GET', '/forms/1/questions.json');
+        $crawler = $client->request('GET', '/api/forms/1/questions.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 200);
@@ -158,7 +161,7 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertEquals('Question 3', $result[2]->question->text);
 
         // try to get responses for non-existing question
-        $crawler = $client->request('GET', '/forms/999/questions.json');
+        $crawler = $client->request('GET', '/api/forms/999/questions.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 404);
@@ -167,9 +170,9 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testQuestionGetObject()
     {
-        $client = static::createClient();
+        $client = static::getClient();
 
-        $crawler = $client->request('GET', '/forms/1/questions/1.json');
+        $crawler = $client->request('GET', '/api/forms/1/questions/1.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 200);
@@ -183,17 +186,17 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertEquals($expected->getOrder(), $result->order);
 
         // get non existing object
-        $crawler = $client->request('GET', '/forms/1/questions/999.json');
+        $crawler = $client->request('GET', '/api/forms/1/questions/999.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 404);
 
-        $crawler = $client->request('GET', '/forms/999/questions/1.json');
+        $crawler = $client->request('GET', '/api/forms/999/questions/1.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 404);
 
-        $crawler = $client->request('GET', '/forms/999/questions/999.json');
+        $crawler = $client->request('GET', '/api/forms/999/questions/999.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 404);
@@ -201,9 +204,9 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testQuestionPost()
     {
-        $client = static::createClient();
+        $client = static::getClient();
         $crawler = $client->request(
-            'POST', '/forms/2/questions.json', array(), array(),
+            'POST', '/api/forms/2/questions.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
             '{"question":{"form":2, "question":3, "order":3}}'
         );
@@ -218,7 +221,7 @@ class FormControllerTest extends FunctionalTestCase
 
         // test post response to non-existing question
         $crawler = $client->request(
-            'POST', '/forms/999/questions.json', array(), array(),
+            'POST', '/api/forms/999/questions.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
             '{"question":{"form":999, "question":3, "order":3}}'
         );
@@ -233,9 +236,9 @@ class FormControllerTest extends FunctionalTestCase
 
     public function testQuestionDelete()
     {
-        $client = static::createClient();
+        $client = static::getClient();
         $crawler = $client->request(
-            'DELETE', '/forms/2/questions/2.json'
+            'DELETE', '/api/forms/2/questions/2.json'
         );
 
         $response = $client->getResponse();
@@ -247,7 +250,7 @@ class FormControllerTest extends FunctionalTestCase
 
         // delete non-existing object
         $crawler = $client->request(
-            'DELETE', '/forms/2/questions/999.json'
+            'DELETE', '/api/forms/2/questions/999.json'
         );
 
         $response = $client->getResponse();
@@ -255,7 +258,7 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertJsonResponse($response, 404);
 
         $crawler = $client->request(
-            'DELETE', '/forms/999/questions/4.json'
+            'DELETE', '/api/forms/999/questions/4.json'
         );
 
         $response = $client->getResponse();

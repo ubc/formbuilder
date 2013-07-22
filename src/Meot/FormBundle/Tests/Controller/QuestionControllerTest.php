@@ -3,6 +3,8 @@
 namespace Meot\FormBundle\Tests\Controller;
 
 use Meot\FormBundle\Tests\FunctionalTestCase;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class QuestionControllerTest extends FunctionalTestCase
 {
@@ -13,9 +15,9 @@ class QuestionControllerTest extends FunctionalTestCase
 
     public function testGet()
     {
-        $client = static::createClient();
+        $client = $this->getClient('user');
 
-        $crawler = $client->request('GET', '/questions.json');
+        $crawler = $client->request('GET', '/api/questions.json');
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, 200);
@@ -25,5 +27,99 @@ class QuestionControllerTest extends FunctionalTestCase
         $this->assertEquals(1, $result[0]->id);
         $this->assertEquals(2, $result[1]->id);
         $this->assertEquals(3, $result[2]->id);
+    }
+
+    public function testPost()
+    {
+        $client = $this->getClient('user');
+
+        $crawler = $client->request(
+            'POST', '/api/questions.json', array(), array(), array(
+                'CONTENT_TYPE' => 'application/json',
+            ),
+            '{"question":{"text":"Test","response_type":"1","is_master":true}}'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 201);
+        // check location
+        $this->assertTrue(
+            $response->headers->contains('Location', 'http://localhost/api/questions/4'),
+            $response->headers
+        );
+
+        // verify against database
+        $forms = $this->entityManager->getRepository('MeotFormBundle:Question')->findAll();
+        $this->assertEquals(4, count($forms));
+
+        // test missing field
+        $crawler = $client->request(
+            'POST', '/api/questions.json', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"question":{"response_type":"1","is_master":true}}'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 500);
+    }
+
+    public function testGetObject()
+    {
+        $client = $this->getClient('user');
+
+        $crawler = $client->request('GET', '/api/questions/1.json');
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 200);
+
+        $question = json_decode($response->getContent());
+
+        $expected = $this->entityManager->find('MeotFormBundle:Question', 1);
+        $this->assertEquals($expected->getId(), $question->id);
+        $this->assertEquals($expected->getText(), $question->text);
+
+        // get non existing object
+        $crawler = $client->request('GET', '/api/questions/999.json');
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 404);
+    }
+
+    public function testPut()
+    {
+        $client = $this->getClient('user');
+
+        $crawler = $client->request(
+            'PUT', '/api/questions/2.json', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"question":{"text":"Question 2a","response_type":2,"is_public":true,"is_master":false,"metadata":{}}}'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 204);
+
+        // verify against database
+        $result = $this->entityManager->find('MeotFormBundle:Question', 2);
+        $this->assertEquals(2, $result->getId());
+        $this->assertEquals('Question 2a', $result->getText());
+        // to set boolean to false, the field should be absent from json request
+        $this->assertTrue($result->getIsPublic());
+        $this->assertFalse($result->getIsMaster());
+        $this->assertEquals(1, $result->getOwner(), 'Owner ID should not change');
+
+        // update a non-existing object
+        $client = static::getClient('user');
+        $crawler = $client->request(
+            'PUT', '/api/questions/999.json', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"form":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, 404);
     }
 }

@@ -10,6 +10,7 @@ abstract class FunctionalTestCase extends WebTestCase
 {
     protected $client;
     protected $entityManager;
+    protected $users = array('user' => 'password', 'admin' => 'password');
 
     protected static function initialize()
     {
@@ -58,6 +59,18 @@ abstract class FunctionalTestCase extends WebTestCase
             $response->headers->contains('Content-Type', 'application/json'),
             $response->headers
         );
+    }
+
+    protected function getClient($username = '')
+    {
+        if ($username != null) {
+            return static::createClient(array(), array(
+                'PHP_AUTH_USER' => $username,
+                'PHP_AUTH_PW'   => $this->users[$username],
+            ));
+        } else {
+            return static::createClient();
+        }
     }
 
 }

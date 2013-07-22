@@ -37,3 +37,11 @@ security:
             logout:
                 path: /builder/logout
                 target: /
+        api:
+            pattern:    ^/api
+            http_basic:
+                realm: Form Builder Dev/Test Login
+                provider: db
+            logout:
+                path: /builder/logout
+                target: /

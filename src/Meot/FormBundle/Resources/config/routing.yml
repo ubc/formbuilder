@@ -4,8 +4,10 @@ web:
 
 questions:
     type:     rest
+    prefix:   api
     resource: Meot\FormBundle\Controller\QuestionController
 
 forms:
     type:     rest
+    prefix:   api
     resource: Meot\FormBundle\Controller\FormController

@@ -47,22 +47,22 @@ class LoadQuestionData extends AbstractFixture implements OrderedFixtureInterfac
         $manager->persist($r1);
 
         $r2 = new Response();
-        $r2->setQuestion($q1);
+        $r2->setQuestion($q3);
         $r2->setText('Response 2');
         $manager->persist($r2);
 
         $r3 = new Response();
-        $r3->setQuestion($q1);
+        $r3->setQuestion($q3);
         $r3->setText('Response 3');
         $manager->persist($r3);
 
         $r4 = new Response();
-        $r4->setQuestion($q2);
+        $r4->setQuestion($q3);
         $r4->setText('Response 4');
         $manager->persist($r4);
 
         $r5 = new Response();
-        $r5->setQuestion($q2);
+        $r5->setQuestion($q3);
         $r5->setText('Response 5');
         $manager->persist($r5);
 
