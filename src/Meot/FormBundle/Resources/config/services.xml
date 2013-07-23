@@ -13,5 +13,8 @@
             factory-service="doctrine" factory-method="getRepository">
             <argument>%meot_user_entity%</argument>
         </service>
+        <service id="formbuilder.twig.form_builder_extension" class="Meot\FormBundle\Twig\FormBuilderExtension">
+            <tag name="twig.extension" />
+        </service>
     </services>
 </container>

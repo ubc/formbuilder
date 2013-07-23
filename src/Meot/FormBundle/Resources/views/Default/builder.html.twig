@@ -30,7 +30,7 @@
                     <!-- Right aligned elements -->
                     <ul class="nav pull-right">
                         {% if app.user %}
-                        <li><a href="#"><i class="icon-user"></i>{{ app.user.username }}</a></li>
+                        <li><a href="#"><i class="icon-user"></i>{{ app.user.username|strip_username }}</a></li>
                         <li><a title="Logout" href="{{ path('logout') }}" data-intro="Don't forget to logout." data-step="5" data-position="left"><i class="icon-signout icon-large"></i></a></li>
                         {% else %}
                         <li><a href="#"><i class="icon-user"></i>Guest</a></li>
