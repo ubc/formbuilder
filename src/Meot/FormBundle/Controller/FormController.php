@@ -137,15 +137,24 @@ class FormController extends FosRestController implements ClassResourceInterface
      *  input="Meot\FormBundle\Form\FormType",
      *  statusCodes={
      *      204="Returned when successful",
+     *      403="Access denied when the owner is not current logged user",
      *      404="Returned when no form found"}
      * )
      */
     public function putAction(Request $request, Form $entity)
     {
+        $owner = $entity->getOwner();
+
+        // check the owner
+        if ($this->getUser()->getId() != $owner) {
+            return $this->view(null, Codes::HTTP_FORBIDDEN);
+        }
+
         $form = $this->getForm($entity);
         $form->bind($request);
 
         if ($form->isValid()) {
+            $entity->setOwner($owner);
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 

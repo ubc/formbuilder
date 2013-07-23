@@ -36,7 +36,7 @@ class LoadFormData extends AbstractFixture implements OrderedFixtureInterface
         $f3->setHeader('header 3');
         $f3->setFooter('footer 3');
         $f3->setIsPublic(1);
-        $f3->setOwner(1);
+        $f3->setOwner(2);
 
         $manager->persist($f3);
 

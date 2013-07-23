@@ -119,6 +119,18 @@ class FormControllerTest extends FunctionalTestCase
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
+
+        // update other's question
+        $client = static::getClient('user');
+        $crawler = $client->request(
+            'PUT', '/api/forms/3.json', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"form":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, Codes::HTTP_FORBIDDEN);
     }
 
     public function testDelete()

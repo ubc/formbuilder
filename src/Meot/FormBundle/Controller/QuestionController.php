@@ -171,10 +171,8 @@ class QuestionController extends FosRestController implements ClassResourceInter
         $form->bind($request);
 
         if ($form->isValid()) {
-
             $entity->setOwner($owner);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
             $em->flush();
 
             return $this->view(null, Codes::HTTP_NO_CONTENT);
