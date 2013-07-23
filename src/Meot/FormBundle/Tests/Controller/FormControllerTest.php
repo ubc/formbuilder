@@ -22,10 +22,11 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertJsonResponse($response, Codes::HTTP_OK);
 
         $result = json_decode($response->getContent());
-        $this->assertEquals(3, count($result));
+        $this->assertEquals(4, count($result));
         $this->assertEquals(1, $result[0]->id);
         $this->assertEquals(2, $result[1]->id);
         $this->assertEquals(3, $result[2]->id);
+        $this->assertEquals(4, $result[3]->id);
     }
 
     public function testPost()
@@ -43,13 +44,13 @@ class FormControllerTest extends FunctionalTestCase
         $this->assertJsonResponse($response, Codes::HTTP_CREATED);
         // check location
         $this->assertTrue(
-            $response->headers->contains('Location', 'http://localhost/api/forms/4'),
+            $response->headers->contains('Location', 'http://localhost/api/forms/5'),
             $response->headers
         );
 
         // verify against database
         $forms = $this->entityManager->getRepository('MeotFormBundle:Form')->findAll();
-        $this->assertEquals(4, count($forms));
+        $this->assertEquals(5, count($forms));
 
         // test missing field
         $crawler = $client->request(
@@ -113,19 +114,19 @@ class FormControllerTest extends FunctionalTestCase
         $crawler = $client->request(
             'PUT', '/api/forms/999.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"form":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
+            '{"form":{"name":"Form 2 updated", "header":"header 2 updated", "footer":"footer 2 updated", "owner":2}}'
         );
 
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
 
-        // update other's question
+        // update other's form
         $client = static::getClient('user');
         $crawler = $client->request(
-            'PUT', '/api/forms/3.json', array(), array(),
+            'PUT', '/api/forms/4.json', array(), array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"form":{"text":"Question 2 updated", "response_type":1, "is_public":1, "owner":1}}'
+            '{"form":{"name":"Form 2 updated", "header":"header 2 updated", "footer":"footer 2 updated", "owner":2}}'
         );
 
         $response = $client->getResponse();
@@ -156,6 +157,16 @@ class FormControllerTest extends FunctionalTestCase
         $response = $client->getResponse();
 
         $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
+
+        // delete other's form
+        $client = static::getClient('user');
+        $crawler = $client->request(
+            'DELETE', '/api/forms/4.json'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertJsonResponse($response, Codes::HTTP_FORBIDDEN);
     }
 
 /*    public function testQuestionGet()

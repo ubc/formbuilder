@@ -93,9 +93,7 @@ class FormController extends FosRestController implements ClassResourceInterface
         $form->bind($request);
 
         if ($form->isValid()) {
-            $user = $this->getUser();
-            //$entity->setOwner($user->getUsername());
-            $entity->setOwner(1);
+            $entity->setOwner($this->getUser()->getId());
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -184,6 +182,13 @@ class FormController extends FosRestController implements ClassResourceInterface
      */
     public function deleteAction(Form $entity)
     {
+        $owner = $entity->getOwner();
+
+        // check the owner
+        if ($this->getUser()->getId() != $owner) {
+            return $this->view(null, Codes::HTTP_FORBIDDEN);
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($entity);
         $em->flush();
