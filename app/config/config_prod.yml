@@ -43,7 +43,7 @@ security:
                 # target doesn't work for now
                 target: /
                 success_handler: security.logout.handler.shibboleth
-
+        api:
             pattern:    ^/api
             shibboleth: ~
             logout:
