@@ -192,7 +192,7 @@ formBuilderApp.directive('formSelector', function(Form) {
     return {
         restrict: 'A',
         require: 'ngModel',
-        templateUrl: 'partials/form-selector.html',
+        templateUrl: '/partials/form-selector.html',
         link: function(scope, element, attrs, ngModel) {
             scope.formlist = Form.query();
             // event when a form is selected
@@ -259,10 +259,10 @@ function QuestionTemplateCtrl($rootScope, $scope, Question) {
         return userId;
     }
 
-	// add a question template to the form
-	$scope.addToForm = function(templateId) {
+    // add a question template to the form
+    $scope.addToForm = function(templateId) {
         $rootScope.$broadcast('addQuestionEvent', {id: templateId});
-	}
+    }
 }
 
 function QuestionTemplateEditCtrl($scope, $location, $routeParams, Question) {
@@ -379,23 +379,23 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
         handle: ".handle"
     }
 
-	$scope.delete = function (idx) {
-		$scope.form.questions.splice(idx, 1);
-	};
+    $scope.delete = function (idx) {
+        $scope.form.questions.splice(idx, 1);
+    };
 
     $scope.$on('addQuestionEvent', function(event, params) {
         Question.get({id:params.id}, function(question){
             // remove question id
             question.id = undefined;
-			// note that to store as a boolean false in the database,
-			// symfony data binding treats the existence of the field
-			// itself as true, so we must give it no value in order to get
-			// it treated as a boolean false.
-			if (!question.is_public) { // need to preserve value of is_public
-				question.is_public = undefined;
-			}
-			// a question placed on a form is always a non-master question
-			question.is_master = undefined;
+            // note that to store as a boolean false in the database,
+            // symfony data binding treats the existence of the field
+            // itself as true, so we must give it no value in order to get
+            // it treated as a boolean false.
+            if (!question.is_public) { // need to preserve value of is_public
+                question.is_public = undefined;
+            }
+            // a question placed on a form is always a non-master question
+            question.is_master = undefined;
             // remove response ids
             for(var j=0; j < question.responses.length; j++) {
                 question.responses[j].id = undefined;
@@ -411,6 +411,12 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
      * event handlers
      */
     $scope.$on('saveEvent', function(event, callback) {
+        // if the form is not mine, clear ids to create a new form
+        if ($scope.form.owner != userId) {
+            $scope.form.clearIds();
+            $scope.form.owner = userId;
+        }
+
         // save if there is no form id
         if ($scope.form.id == undefined) {
             Form.save({form: $scope.form}, function(response, headers) {
@@ -426,38 +432,28 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
             })
         } else {
             var form_id = $scope.form.id;
-            $scope.form.id = undefined;
 
-            var questions = $scope.form.questions.slice(0);
-
-            for (var i = 0; i < $scope.form.questions.length; i++) {
-                // clean up the question ids
-                $scope.form.questions[i].id = undefined;
-                // clean up metadata to convert object to string so that backend will be happy
-//                if ($scope.form.questions[i].metadata instanceof Object) {
-//                    $scope.form.questions[i].metadata = stringify($scope.form.questions[i].metadata);
-//                }
-                // clean up the response Ids
-                for(var j=0; j < $scope.form.questions[i].responses.length; j++) {
-                    $scope.form.questions[i].responses[j].id = undefined;
-                }
-            }
+            $scope.form.clearIds();
 
             Form.update({id: form_id}, {form: $scope.form}, function(response) {
                 // sync the form to self.form
                 self.form = angular.copy($scope.form);
 
-//                for (var i = 0; i < $scope.form.questions.length; i++) {
-//                    // clean up metadata to convert object to string so that backend will be happy
-//                    if ($scope.form.questions[i].metadata instanceof String) {
-//                        $scope.form.questions[i].metadata = objectify($scope.form.questions[i].metadata);
-//                    }
-//                }
-
                 if (callback != undefined) {
                     callback();
                 }
+            },
+            function(error) {
+                switch(error.status) {
+                    case 403:
+                        alert("You don't have permission to save this form!");
+                        break;
+                    default:
+                        alert("Form saving failed!");
+                }
             });
+
+            // restore the form id
             $scope.form.id = form_id;
         }
     });
