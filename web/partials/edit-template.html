@@ -11,7 +11,7 @@
      </div>
 
     <div class="control-group" ng-class="{error: myForm.response_type.$invalid}">
-        <label class="pull-left">Response</label>  <button ng-click="addResponse($event)" class="btn pull-right" ng-show="template.response_type == 3 ||template.response_type == 4">Add Response</button>
+        <label class="pull-left">Response Type</label>  <button ng-click="addResponse($event)" class="btn pull-right" ng-show="template.response_type == 3 ||template.response_type == 4">Add Response</button><br/>
         <select name="response_type" ng-model="template.response_type" class="input-block-level" required>
             <option value="1">Text (one line)</option>
             <option value="2">Text (multiple lines)</option>
