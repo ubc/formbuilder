@@ -25,3 +25,14 @@ This app is used for generating a survey form from a question bank.
 
 Note that symfony's ORM engine, doctrine, doesn't provide a way to configure charset and collation on the databases it creates. The database default character encodings is used. So if we want UTF8 encoded databases, it has to be configured as mysql defaults (e.g.: collation\_server, character\_set\_server options).
 
+## Testing
+
+* To test front end, run:
+
+    scripts/test.sh
+
+The script will launch a Chrome browser to run the test and monitor any changes on the javascripts.
+
+* For the backendi, run:
+
+    phpunit -c app/
