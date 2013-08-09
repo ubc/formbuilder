@@ -267,7 +267,7 @@ function QuestionTemplateCtrl($rootScope, $scope, Question) {
 
 function QuestionTemplateEditCtrl($scope, $location, $routeParams, Question) {
     var self = this;
-    console.log(Question);
+
     Question.get({id: $routeParams.templateId}, function(template){
         self.original = template;
         $scope.template = angular.copy(template);
@@ -358,7 +358,7 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
     var self = this;
     $scope.form = new Form();
 
-    var resetForm = function () {
+    this.resetForm = function () {
         $scope.form.id = undefined;
         $scope.form.name = "Untitled Form";
         $scope.form.header = "<h2>Default Header</h2>";
@@ -367,11 +367,34 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
         self.form = new Form($scope.form);
     }
 
+    this.loadForm = function () {
+        var t = '<div class="modal-header">Forms</div>'+
+            '<div class="modal-body" form-selector ng-model="selectedform"></div>' +
+            '<div class="modal-footer"><button ng-click="close(result)" class="btn btn-primary" >Close</button></div>'
+        '</div>';
+        var d = $dialog.dialog({template: t, controller: 'FormLoadController'});
+        d.open().then(function(result){
+            if (result != undefined) {
+                // user selected a form to load
+                Form.get({id:result}, function(form) {
+                    $scope.form = angular.copy(form);
+                    $scope.form.questions.forEach(function(value) {
+                        if (value.metadata == undefined) {
+                            return;
+                        }
+                    })
+                    // sync the form to self.form
+                    self.form = angular.copy($scope.form);
+                });
+            }
+        });
+    }
+
     function isDirty () {
         return !angular.equals($scope.form, self.form);
     }
 
-    resetForm();
+    this.resetForm();
 
     $scope.sortableOptions = {
         placeholder: "ui-state-highlight",
@@ -464,57 +487,30 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
             var msgbox = $dialog.messageBox('Save Form?', 'The form has been changed. Do you want to save it before continue?', [{label:'Yes', result: 'yes'},{label:'Discard', result: 'no'}]);
             msgbox.open().then(function(result){
                 if(result === 'yes') {
-                    $rootScope.$broadcast('saveEvent', resetForm);
+                    $rootScope.$broadcast('saveEvent', self.resetForm);
                 } else {
-                    resetForm();
+                    self.resetForm();
                 }
             });
         } else {
-            resetForm();
+            self.resetForm();
         }
     })
 
     $scope.$on('loadEvent', function(event) {
-        console.log('load');
-
-        function loadForm() {
-            var t = '<div class="modal-header">Forms</div>'+
-                '<div class="modal-body" form-selector ng-model="selectedform"></div>' +
-                '<div class="modal-footer"><button ng-click="close(result)" class="btn btn-primary" >Close</button></div>'
-            '</div>';
-            var d = $dialog.dialog({template: t, controller: 'FormLoadController'});
-            d.open().then(function(result){
-                if (result != undefined) {
-                    // user selected a form to load
-                    Form.get({id:result}, function(form) {
-                        $scope.form = angular.copy(form);
-                        $scope.form.questions.forEach(function(value) {
-                            if (value.metadata == undefined) {
-                                return;
-                            }
-                        })
-                        // sync the form to self.form
-                        self.form = angular.copy($scope.form);
-                    });
-                }
-            });
-        }
-
         // check if the form is dirty
         if (isDirty()) {
             var msgbox = $dialog.messageBox('Save Form?', 'The form has been changed. Do you want to save it before continue?', [{label:'Yes', result: 'yes'},{label:'Discard', result: 'no'}]);
             msgbox.open().then(function(result){
                 if(result === 'yes') {
-                    $rootScope.$broadcast('saveEvent', loadForm);
+                    $rootScope.$broadcast('saveEvent', self.loadForm);
                 } else {
-                    loadForm();
+                    self.loadForm();
                 }
             });
         } else {
-            loadForm();
+            self.loadForm();
         }
-
-
     })
 }
 
