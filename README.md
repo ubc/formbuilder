@@ -33,6 +33,6 @@ Note that symfony's ORM engine, doctrine, doesn't provide a way to configure cha
 
 The script will launch a Chrome browser to run the test and monitor any changes on the javascripts.
 
-* For the backendi, run:
+* For the back end, run:
 
     phpunit -c app/
