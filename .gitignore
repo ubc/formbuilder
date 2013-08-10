@@ -10,6 +10,7 @@ report/
 composer.phar
 composer.lock
 Session.vim
+cache.properties
 *.bak
 .idea
 *.swp
