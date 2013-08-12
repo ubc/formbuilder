@@ -148,9 +148,6 @@
     </target>
 
     <target name="parameters" description="Copy parameters">
-        <exec executable="cp" failonerror="true">
-            <arg path="app/config/parameters.ini.template" />
-            <arg path="app/config/parameters.ini" />
-        </exec>
+        <copy file="app/config/parameters.yml.template" tofile="app/config/parameters.yml" overwrite="false"/>
     </target>
 </project>
