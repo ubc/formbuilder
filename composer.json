@@ -20,7 +20,7 @@
         "jms/security-extra-bundle": "1.5.*",
         "kriswallsmith/assetic": "1.1.*@dev",
         "nelmio/api-doc-bundle": "dev-master",
-        "friendsofsymfony/rest-bundle": "dev-master",
+        "friendsofsymfony/rest-bundle": "0.12.0",
         "jms/di-extra-bundle": "1.4.*@dev",
         "jms/serializer-bundle": "0.12.*@dev",
         "jms/serializer": "0.12.*@dev",
