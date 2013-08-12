@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="FormBuilder" default="build">
-    <target name="build" depends="prepare,composer,parameters,vendors,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
+    <target name="build" depends="prepare,composer,parameters,vendors,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,test,phpcb"/>
 
-    <target name="build-parallel" depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+    <target name="build-parallel" depends="prepare,lint,tools-parallel,test,phpcb"/>
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
@@ -122,6 +122,15 @@
             <arg path="${basedir}/app/phpunit.xml" />
         </exec>
     </target>
+
+    <target name="testfront" description="Run front end unit tests">
+        <exec executable="karma" failonerror="true">
+            <arg value="start" />
+            <arg path="${basedir}/app/config/karma_ci.conf.js" />
+        </exec>
+    </target>
+
+    <target name="test" description="Run all tests" depends="phpunit, testfront"/>
 
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="phpcb">

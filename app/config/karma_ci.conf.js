@@ -11,11 +11,13 @@ files = [
   'test/unit/**/*.js'
 ];
 
-autoWatch = true;
+autoWatch = false;
 
-browsers = ['Chrome'];
+singleRun = true;
+reporters = ['dots', 'junit'];
+browsers = ['PhantomJS', 'Firefox'];
 
 junitReporter = {
-  outputFile: 'js_unit.xml',
+  outputFile: 'app/build/logs/js_unit.xml',
   suite: 'unit'
 };
