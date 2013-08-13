@@ -32,7 +32,7 @@ module.exports = function(config) {
         },
 
         coverageReporter: {
-            type : 'html',
+            type : 'cobertura',
             dir : 'app/build/jscoverage/'
         },
 
