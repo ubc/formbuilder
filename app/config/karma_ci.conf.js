@@ -33,7 +33,7 @@ module.exports = function(config) {
 
         coverageReporter: {
             type : 'html',
-            dir : 'app/build/logs/jscoverage/'
+            dir : 'app/build/jscoverage/'
         },
 
         reportSlowerThan: 500,
