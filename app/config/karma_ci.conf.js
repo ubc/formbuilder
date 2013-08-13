@@ -14,13 +14,26 @@ module.exports = function(config) {
         autoWatch: false,
 
         singleRun: true,
-        reporters: ['dots', 'junit'],
         browsers: ['PhantomJS', 'Firefox'],
         frameworks: ["jasmine"],
+
+        reporters: ['dots', 'junit', 'coverage'],
+
+        preprocessors: {
+            // source files, that you wanna generate coverage for
+            // do not include tests or libraries
+            // (these files will be instrumented by Istanbul)
+            'web/js/*.js': ['coverage']
+        },
 
         junitReporter: {
             outputFile: 'app/build/logs/js_unit.xml',
             suite: 'unit'
+        },
+
+        coverageReporter: {
+            type : 'html',
+            dir : 'app/build/logs/jscoverage/'
         },
 
         reportSlowerThan: 500,
