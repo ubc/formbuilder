@@ -278,7 +278,7 @@ function QuestionTemplateEditCtrl($scope, $location, $routeParams, Question) {
     }
 
     $scope.destroy = function() {
-        Question.delete({id: self.original.id});
+        Question.remove({id: self.original.id});
         $location.path('/list');
     };
 
@@ -402,7 +402,7 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
         handle: ".handle"
     }
 
-    $scope.delete = function (idx) {
+    $scope.deleteQuestion = function (idx) {
         $scope.form.questions.splice(idx, 1);
     };
 
@@ -444,8 +444,8 @@ function FormCtrl($scope, $dialog, $rootScope, Question, Form) {
         if ($scope.form.id == undefined) {
             Form.save({form: $scope.form}, function(response, headers) {
                 // parse form id from location
-                var location = headers("location");
-                $scope.form.id = location.match(/\/forms\/(.*)$/)[1];
+                var whereisthis = headers("location");
+                $scope.form.id = whereisthis.match(/\/forms\/(.*)$/)[1];
                 // sync the form to self.form
                 self.form = angular.copy($scope.form);
 
@@ -518,7 +518,7 @@ function MenuCtrl($scope, $rootScope) {
     $scope.save = function() {
         $rootScope.$broadcast('saveEvent');
     }
-    $scope.new = function() {
+    $scope.newForm = function() {
         $rootScope.$broadcast('newEvent');
     }
     $scope.load = function() {
