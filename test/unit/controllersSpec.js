@@ -219,7 +219,7 @@ describe('FormBuilder controllers', function() {
         it('should delete question', function() {
             scope.form.questions = [{"text":"q1"}, {"text":"q2"}];
             // delete the second question
-            scope.delete(1);
+            scope.deleteQuestion(1);
             expect(scope.form.questions.length).toBe(1);
             expect(scope.form.questions[0].text).toBe("q1");
         });
