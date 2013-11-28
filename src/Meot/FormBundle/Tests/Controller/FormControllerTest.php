@@ -3,7 +3,7 @@
 namespace Meot\FormBundle\Tests\Controller;
 
 use Meot\FormBundle\Tests\FunctionalTestCase;
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Util\Codes;
 
 class FormControllerTest extends FunctionalTestCase
 {

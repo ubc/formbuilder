@@ -5,7 +5,7 @@ namespace Meot\FormBundle\Tests\Controller;
 use Meot\FormBundle\Tests\FunctionalTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Util\Codes;
 
 class QuestionControllerTest extends FunctionalTestCase
 {

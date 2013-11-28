@@ -13,7 +13,7 @@ use FOS\RestBundle\Controller\Annotations as Rest,
     FOS\RestBundle\Controller\FOSRestController,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Routing\ClassResourceInterface,
-    FOS\Rest\Util\Codes;
+    FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 
