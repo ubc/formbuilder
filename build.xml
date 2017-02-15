@@ -157,6 +157,6 @@
     </target>
 
     <target name="parameters" description="Copy parameters">
-        <copy file="app/config/parameters.yml.template" tofile="app/config/parameters.yml" overwrite="false"/>
+        <copy file="app/config/parameters.yml.dist" tofile="app/config/parameters.yml" overwrite="false"/>
     </target>
 </project>
